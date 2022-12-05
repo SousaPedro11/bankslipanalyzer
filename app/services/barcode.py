@@ -1,4 +1,5 @@
 import re
+from functools import lru_cache
 from typing import Optional
 
 from app.api.helpers.calculators import due_date_from_factor, module_11
@@ -29,6 +30,7 @@ class BarcodeService:
             vd_field_free=groups["dv_campo_livre"],
         )
 
+    @lru_cache
     def _calculate_general_verification_digit(self):
         return module_11(
             "".join(
@@ -48,6 +50,7 @@ class BarcodeService:
             ),
         )
 
+    @lru_cache
     def _calculate_field_free_verification_digit(self):
         return module_11(
             "".join(
@@ -62,6 +65,7 @@ class BarcodeService:
             ),
         )
 
+    @lru_cache
     def _get_due_date(self):
         return due_date_from_factor(self.barcode.due_date_factor)
 

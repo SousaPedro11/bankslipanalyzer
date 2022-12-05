@@ -7,7 +7,8 @@ def module_11(number: str) -> int:
     sum_ = 0
     for i, digit in enumerate(number[::-1]):
         pound_factor = i % 8
-        sum_ += int(digit) * (2 + pound_factor)
+        multiplier = 2 + pound_factor
+        sum_ += int(digit) * multiplier
 
     result = 11 - sum_ % 11
 
