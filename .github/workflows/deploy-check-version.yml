@@ -1,0 +1,26 @@
+name: Deploy - Check version
+
+on:
+  workflow_call:
+    outputs:
+      VERSION:
+        value: ${{ jobs.check-version.outputs.VERSION }}
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.get-tag.outputs.tag }}
+    steps:
+      - uses: olegtarasov/get-tag@v2.1
+        id: get-tag
+
+      - run: |
+          echo "The VERSION is '$GIT_TAG_NAME'"
+
+      - name: Check Version
+        if: ${{ env.GIT_TAG_NAME == '' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('the version is not defined, you must trigger the deploy from a tag!')

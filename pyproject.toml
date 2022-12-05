@@ -1,0 +1,43 @@
+[tool.poetry]
+authors = ["Pedro Sousa <36779714+SousaPedro11@users.noreply.github.com>"]
+description = ""
+name = "bankslipanalyzer"
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+fastapi = "^0.88.0"
+pendulum = "^2.1.2"
+python = "^3.10"
+python-decouple = "^3.6"
+python-multipart = "^0.0.5"
+sentry-sdk = "^1.11.1"
+uvicorn = "^0.20.0"
+
+[tool.poetry.group.dev.dependencies]
+autoflake = "^2.0.0"
+black = "^22.10.0"
+flake8 = "^6.0.0"
+pylint = "^2.15.7"
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+yesqa = "^1.4.0"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+combine_as_imports = true
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 120
+multi_line_output = 3
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "--cov=. --cov-report term-missing:skip-covered --cov-fail-under 80 --cov-config .coveragerc"
+python_files = "*tests.py *test_*.py *_tests.py"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]

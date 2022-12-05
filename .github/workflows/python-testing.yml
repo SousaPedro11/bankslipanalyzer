@@ -1,0 +1,62 @@
+name: Python testing workflow
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: koper
+          POSTGRES_USER: koper
+          POSTGRES_PASSWORD: koper
+          TZ: America/Sao_Paulo
+        ports:
+          - 5432:5432
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10.8"
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ inputs.project }}/.venv
+          key: cache-${{ inputs.project }}-venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+        working-directory: ${{ inputs.project }}
+
+      - name: Test with pytest
+        run: |
+          source ${{ inputs.project }}/.venv/bin/activate
+          cd ${{ inputs.project }}
+          poetry run pytest -s -q -vv app/tests/
+        env:
+          POSTGRES_URI: postgresql://koper:koper@localhost:5432/koper
+          MONGO_URI: mongodb://localhost:27017
