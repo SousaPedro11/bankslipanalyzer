@@ -6,11 +6,7 @@ on:
     branches:
       - develop
       - main
-    paths:
-      - app/**"
   pull_request:
-    paths:
-      - app/**"
     branches:
       - develop
       - main
