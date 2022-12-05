@@ -31,32 +31,27 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: ${{ inputs.project }}/.venv
+          path: .venv
           key: cache-${{ inputs.project }}-venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
-        working-directory: ${{ inputs.project }}
 
       - name: Outdated dependencies
         run: poetry show -o
-        working-directory: ${{ inputs.project }}
 
       - name: Lint with black
         run: |
           source .venv/bin/activate
           poetry run black --check -v --diff .
-        working-directory: ${{ inputs.project }}
 
       - name: Flake
         run: |
           source .venv/bin/activate
           flake8 app/
-        working-directory: ${{ inputs.project }}
 
       - name: Linting
         run: |
           source .venv/bin/activate
           pylint -E app/
-        working-directory: ${{ inputs.project }}
