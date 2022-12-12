@@ -1,7 +1,7 @@
 from pendulum import date, now
 
 
-def module_11(number: str) -> int:
+def module_11(number: str, general: bool = False) -> int:
     """Module 11 - Bank Slip"""
     number = number.replace(".", "").replace(" ", "")
     sum_ = 0
@@ -11,6 +11,9 @@ def module_11(number: str) -> int:
         sum_ += int(digit) * multiplier
 
     result = 11 - sum_ % 11
+
+    if general and (result == 0 or result > 9):
+        return 1
 
     return 0 if result > 9 else result
 

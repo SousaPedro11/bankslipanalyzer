@@ -7,6 +7,7 @@ def main() -> None:
         "app.main:get_app",
         reload=True,
         factory=True,
+        host="0.0.0.0",
     )
 
 

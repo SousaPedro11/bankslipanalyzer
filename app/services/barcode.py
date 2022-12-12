@@ -30,8 +30,25 @@ class BarcodeService:
             vd_field_free=groups["dv_campo_livre"],
         )
 
+    def _calculate_beneficiary_code_verification_digit(self):
+        beneficiary_code = self.original_barcode.beneficiary_code
+        dv_beneficiary_code = None
+        if beneficiary_code.endswith("0") and int(beneficiary_code[:-1]) <= 999999:
+            beneficiary_code = beneficiary_code[:-1]
+            dv_beneficiary_code = module_11(beneficiary_code)
+
+        if int(beneficiary_code) <= 999999 and not beneficiary_code.endswith("0"):
+            beneficiary_code = str(int(beneficiary_code[:-1])).zfill(6)
+            dv_beneficiary_code = module_11(beneficiary_code)
+
+        beneficiary_code = (
+            beneficiary_code if dv_beneficiary_code is None else f"{beneficiary_code}{dv_beneficiary_code}"
+        )
+        return beneficiary_code
+
     @lru_cache
     def _calculate_general_verification_digit(self):
+        beneficiary_code = self._calculate_beneficiary_code_verification_digit()
         return module_11(
             "".join(
                 [
@@ -39,7 +56,7 @@ class BarcodeService:
                     self.barcode.currency_code,
                     self.barcode.due_date_factor,
                     self.barcode.document_value,
-                    self.barcode.beneficiary_code,
+                    beneficiary_code,
                     self.barcode.sequence_1,
                     self.barcode.constant_1,
                     self.barcode.sequence_2,
@@ -48,14 +65,16 @@ class BarcodeService:
                     self.barcode.vd_field_free,
                 ],
             ),
+            general=True,
         )
 
     @lru_cache
     def _calculate_field_free_verification_digit(self):
+        beneficiary_code = self._calculate_beneficiary_code_verification_digit()
         return module_11(
             "".join(
                 [
-                    self.barcode.beneficiary_code,
+                    beneficiary_code,
                     self.barcode.sequence_1,
                     self.barcode.constant_1,
                     self.barcode.sequence_2,
