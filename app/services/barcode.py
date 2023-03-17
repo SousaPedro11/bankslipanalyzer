@@ -37,7 +37,7 @@ class BarcodeService:
             beneficiary_code = beneficiary_code[:-1]
             dv_beneficiary_code = module_11(beneficiary_code)
 
-        if int(beneficiary_code) <= 999999 and not beneficiary_code.endswith("0"):
+        elif int(beneficiary_code) <= 999999 and not beneficiary_code.endswith("0"):
             beneficiary_code = str(int(beneficiary_code[:-1])).zfill(6)
             dv_beneficiary_code = module_11(beneficiary_code)
 

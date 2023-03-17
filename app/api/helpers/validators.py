@@ -1,3 +1,6 @@
+import re
+
+
 def validate_file_extension(file_name: str, extension: str) -> bool:
     return file_name.upper().endswith(extension)
 
@@ -92,7 +95,7 @@ def regex_lot_header_nexxera():
         "^(?P<banco>\\d{3})",  # Cod. do Banco na Compensacao
         "(?P<lote>\\d{4})",  # Lote de servico
         "(?P<registro>1)",  # Tipo de registro
-        "(?P<operacao>\\s)",  # Tipo de operacao
+        "(?P<operacao>.{1})",  # Tipo de operacao
         "(?P<servico>\\d{2})",  # Tipo de servico
         "(?P<filler>\\s{2})",  # Uso Exclusivo NEXXERA
         "(?P<versao_layout>\\d{3})",  # Versao do layout do lote
@@ -111,10 +114,14 @@ def regex_lot_header_nexxera():
         "(?P<numero_remessa>\\d{8})",  # Numero da remessa/retorno
         "(?P<data_gravacao>\\d{8})",  # Data de gravacao da remessa/retorno
         "(?P<data_credito>\\d{8})",  # Data do credito
-        "(?P<modelo_cod>\\.{7})",  # Codigo de modelo personalizado
+        "(?P<modelo_cod>.{7})",  # Codigo de modelo personalizado
         "(?P<filler_3>\\s{26})",  # Uso Exclusivo NEXXERA
         "$",
     ]
+
+    # stro = (
+    # "^(?<banco>\d{3})(?<lote>\d{4})(?<registro>1)(?<operacao>.{1})(?<servico>\d{2})(?<filler>\s{2})(?<versao_layout>\d{3})(?<filler_2>\s{1})(?<inscricao_tipo>\d)(?<inscricao_numero>\d{15})(?<convenio>.{20})(?<agencia_codigo>\d{5})(?<agencia_dv>.{1})(?<conta_numero>\d{12})(?<conta_dv>.{1})(?<ag_conta_dv>.{1})(?<empresa_nome>.{30})(?<mensagem>.{40})(?<mensagem_2>.{40})(?<numero_remessa>\d{8})(?<data_gravacao>\d{8})(?<data_credito>\d{8})(?<modelo_cod>\.{7})(?<filler_3>\s{26})$",
+    # )
 
     return "".join(regex_components)
 
@@ -267,13 +274,14 @@ def regex_y_segment_nexxera():
     return ""
 
 
-def regex_segment_nexxera() -> str:
+def is_segment_nexxera(line: str) -> bool:
     segments_pattern = [
         regex_p_segment_nexxera(),
         regex_q_segment_nexxera(),
         regex_r_segment_nexxera(),
     ]
-    return " | ".join(segments_pattern)
+
+    return any(re.match(pattern, line) for pattern in segments_pattern)
 
 
 def regex_lot_trailer_nexxera() -> str:
@@ -297,7 +305,7 @@ def regex_lot_trailer_nexxera() -> str:
         "(?P<cobranca_descontada_qtd>\\d{6})",  # Quantidade de titulos em cobranca descontada
         "(?P<cobranca_descontada_valor>\\d{17})",  # Valor total dos titulos em cobranca descontada
         "(?P<aviso_numero>.{8})",  # Numero do aviso de lancamento
-        "(?P<filler>\\s{117})",  # Uso Exclusivo NEXXERA
+        "(?P<filler_2>\\s{117})",  # Uso Exclusivo NEXXERA
         "$",
     ]
 

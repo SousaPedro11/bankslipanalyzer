@@ -143,6 +143,180 @@ class SegmentPSchema(FileLineSchema):
         max_length=1,
         regex="P",
     )
+    bank: str = Field(..., description="Cod. do Banco na Compensacao", example="104", min_length=3, max_length=3)
+    service_lot: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
+    record_type: str = Field(..., description="Tipo de registro", example="3", min_length=1, max_length=1)
+    record_number: str = Field(
+        ...,
+        description="Numero sequencial do registro no lote",
+        example="00001",
+        min_length=5,
+        max_length=5,
+    )
+    segment_code: str = Field(
+        ...,
+        description="Codigo do segmento do registro detalhe",
+        example="P",
+        min_length=1,
+        max_length=1,
+    )
+    filler: str = Field(..., description="Uso Exclusivo NEXXERA", example=" " * 1, min_length=1, max_length=1)
+    remittance_movement_code: str = Field(
+        ...,
+        description="Codigo de movimento remessa",
+        example="01",
+        min_length=2,
+        max_length=2,
+    )
+    maintaining_agency_code: str = Field(
+        ...,
+        description="Agencia mantenedora da conta",
+        example="00000",
+        min_length=5,
+        max_length=5,
+    )
+    agency_dv: str = Field(..., description="Digito verificador da agencia", example="0", min_length=1, max_length=1)
+    checking_account_number: str = Field(
+        ...,
+        description="Numero da conta corrente",
+        example="0" * 12,
+        min_length=12,
+        max_length=12,
+    )
+    account_dv: str = Field(..., description="Digito verificador da conta", example="0", min_length=1, max_length=1)
+    agency_account_dv: str = Field(
+        ...,
+        description="Digito verificador da agencia/conta",
+        example="0",
+        min_length=1,
+        max_length=1,
+    )
+    our_number: str = Field(..., description="Nosso numero", example="0" * 20, min_length=20, max_length=20)
+    wallet_code: str = Field(..., description="Codigo da carteira", example="1", min_length=1, max_length=1)
+    registration_type: str = Field(..., description="Tipo de cadastramento", example="1", min_length=1, max_length=1)
+    billing_document: str = Field(
+        ...,
+        description="Tipo de documento de cobranca",
+        example="1",
+        min_length=1,
+        max_length=1,
+    )
+    billet_issue_date: str = Field(..., description="Emissao do bloqueto", example="0", min_length=1, max_length=1)
+    billet_distribution: str = Field(
+        ...,
+        description="Distribuicao do bloqueto",
+        example="0",
+        min_length=1,
+        max_length=1,
+    )
+    billing_document_number: str = Field(
+        ...,
+        description="Numero do documento de cobranca",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    due_date: str = Field(
+        ...,
+        description="Data de vencimento do titulo",
+        example="00000000",
+        min_length=8,
+        max_length=8,
+    )
+    nominal_value: str = Field(
+        ...,
+        description="Valor nominal do titulo",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    collection_agency_code: str = Field(
+        ...,
+        description="Agencia cobradora",
+        example="00000",
+        min_length=5,
+        max_length=5,
+    )
+    collection_agency_dv: str = Field(
+        ...,
+        description="Digito verificador da agencia cobradora",
+        example="0",
+        min_length=1,
+        max_length=1,
+    )
+    species_code: str = Field(..., description="Especie do titulo", example="01", min_length=2, max_length=2)
+    acceptance: str = Field(
+        ...,
+        description="Identificacao do titulo aceito/não aceito",
+        example="N",
+        min_length=1,
+        max_length=1,
+    )
+    issuance_date: str = Field(
+        ...,
+        description="Data de emissao do titulo",
+        example="00000000",
+        min_length=8,
+        max_length=8,
+    )
+    mora_interest_code: str = Field(..., description="Codigo do juros de mora", example="0", min_length=1, max_length=1)
+    mora_interest_date: str = Field(
+        ...,
+        description="Data do juros de mora",
+        example="00000000",
+        min_length=8,
+        max_length=8,
+    )
+    mora_interest_rate: str = Field(
+        ...,
+        description="Juros de mora por dia/taxa",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    discount_code: str = Field(..., description="Codigo do desconto 1", example="0", min_length=1, max_length=1)
+    discount_date: str = Field(..., description="Data do desconto 1", example="00000000", min_length=8, max_length=8)
+    discount_value: str = Field(
+        ...,
+        description="Valor/percentual a ser concedido",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    iof_value: str = Field(
+        ...,
+        description="Valor do IOF a ser recolhido",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    abatement_value: str = Field(..., description="Valor do abatimento", example="0" * 15, min_length=15, max_length=15)
+    title_identification_in_company: str = Field(
+        ...,
+        description="Identificacao do titulo na empresa",
+        example="0" * 25,
+        min_length=25,
+        max_length=25,
+    )
+    protest_code: str = Field(..., description="Codigo para protesto", example="0", min_length=1, max_length=1)
+    protest_deadline: str = Field(..., description="Prazo para protesto", example="00", min_length=2, max_length=2)
+    discharge_code: str = Field(..., description="Codigo para baixa/devolucao", example="0", min_length=1, max_length=1)
+    discharge_deadline: str = Field(
+        ...,
+        description="Prazo para baixa/devolucao",
+        example="000",
+        min_length=3,
+        max_length=3,
+    )
+    currency_code: str = Field(..., description="Codigo da moeda", example="00", min_length=2, max_length=2)
+    credit_operation_contract_number: str = Field(
+        ...,
+        description="Numero do contrato da operacao de credito",
+        example="0" * 10,
+        min_length=10,
+        max_length=10,
+    )
+    free_use: str = Field(..., description="Uso livre", example="N", min_length=1, max_length=1)
 
     class Config:
         load_only = ["segment_name"]
@@ -157,6 +331,85 @@ class SegmentQSchema(FileLineSchema):
         max_length=1,
         regex="Q",
     )
+    bank_code: str = Field(..., description="Cod. do Banco na Compensacao", example="756", min_length=3, max_length=3)
+    service_batch: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
+    record_type: str = Field(..., description="Tipo de registro", example="3", min_length=1, max_length=1)
+    record_number: str = Field(
+        ...,
+        description="Numero sequencial do registro no lote",
+        example="00001",
+        min_length=5,
+        max_length=5,
+    )
+    segment_code: str = Field(
+        ...,
+        description="Codigo do segmento do registro detalhe",
+        example="Q",
+        min_length=1,
+        max_length=1,
+    )
+    filler: str = Field(..., description="Uso Exclusivo NEXXERA", example=" ", min_length=1, max_length=1)
+    transaction_code: str = Field(
+        ...,
+        description="Codigo de movimento remessa",
+        example="01",
+        min_length=2,
+        max_length=2,
+    )
+    payee_type: str = Field(..., description="Tipo de inscricao", example="1", min_length=1, max_length=1)
+    payee_number: str = Field(..., description="Numero de inscricao", example="0" * 15, min_length=15, max_length=15)
+    payee_name: str = Field(..., description="Nome", example=" " * 40, min_length=40, max_length=40)
+    payee_address: str = Field(..., description="Endereco", example=" " * 40, min_length=40, max_length=40)
+    payee_district: str = Field(..., description="Bairro", example=" " * 15, min_length=15, max_length=15)
+    payee_zip: str = Field(..., description="CEP", example="0" * 5, min_length=5, max_length=5)
+    payee_zip_suffix: str = Field(..., description="Sufixo do CEP", example="0" * 3, min_length=3, max_length=3)
+    payee_city: str = Field(..., description="Cidade", example=" " * 15, min_length=15, max_length=15)
+    payee_state: str = Field(..., description="UF", example=" " * 2, min_length=2, max_length=2)
+    guarantor_type: str = Field(
+        ...,
+        description="Tipo de inscricao do avalista",
+        example="0",
+        min_length=1,
+        max_length=1,
+    )
+    guarantor_number: str = Field(
+        ...,
+        description="Numero de inscricao do avalista",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    guarantor_name: str = Field(..., description="Nome do avalista", example=" " * 40, min_length=40, max_length=40)
+    corresponding_bank_code: str = Field(
+        ...,
+        description="Codigo do banco correspondente na compensacao",
+        example="0" * 3,
+        min_length=3,
+        max_length=3,
+    )
+    corresponding_bank_our_number: str = Field(
+        ...,
+        description="Nosso numero no banco correspondente",
+        example="0" * 20,
+        min_length=20,
+        max_length=20,
+    )
+    boleto_access: str = Field(..., description="Acesso ao boleto", example=" ", min_length=1, max_length=1)
+    first_billing_instruction: str = Field(
+        ...,
+        description="Instrucao de cobranca 1",
+        example=" " * 2,
+        min_length=2,
+        max_length=2,
+    )
+    second_billing_instruction: str = Field(
+        ...,
+        description="Instrucao de cobranca 2",
+        example=" " * 2,
+        min_length=2,
+        max_length=2,
+    )
+    wallet_variation: str = Field(..., description="Variacao da carteira", example=" " * 3, min_length=3, max_length=3)
 
     class Config:
         load_only = ["segment_name"]
@@ -219,7 +472,81 @@ class SegmentVSchema(FileLineSchema):
 
 
 class LotTrailerSchema(FileLineSchema):
-    pass
+    bank_code: str = Field(..., description="Cod. do Banco na Compensacao", example="104", min_length=3, max_length=3)
+    batch: str = Field(..., description="Lote de servico", example="0000", min_length=4, max_length=4)
+    record_type: str = Field(..., description="Tipo de registro", example="5", min_length=1, max_length=1, regex="5")
+    filler: str = Field(..., description="Uso Exclusivo FEBRABAN/CNAB", example=" " * 9, min_length=9, max_length=9)
+    batch_records_quantity: str = Field(
+        ...,
+        description="Quantidade de registros do lote",
+        example="000000",
+        min_length=6,
+        max_length=6,
+    )
+    simple_billing_quantity: str = Field(
+        ...,
+        description="Quantidade de titulos em cobranca simples",
+        example="000000",
+        min_length=6,
+        max_length=6,
+    )
+    simple_billing_value: str = Field(
+        ...,
+        description="Valor total dos titulos em cobranca simples",
+        example=" " * 17,
+        min_length=17,
+        max_length=17,
+    )
+    linked_billing_quantity: str = Field(
+        ...,
+        description="Quantidade de titulos em cobranca vinculada",
+        example="000000",
+        min_length=6,
+        max_length=6,
+    )
+    linked_billing_value: str = Field(
+        ...,
+        description="Valor total dos titulos em cobranca vinculada",
+        example=" " * 17,
+        min_length=17,
+        max_length=17,
+    )
+    pledged_billing_quantity: str = Field(
+        ...,
+        description="Quantidade de titulos em cobranca caucionada",
+        example="000000",
+        min_length=6,
+        max_length=6,
+    )
+    pledged_billing_value: str = Field(
+        ...,
+        description="Valor total dos titulos em cobranca caucionada",
+        example=" " * 17,
+        min_length=17,
+        max_length=17,
+    )
+    discounted_billing_quantity: str = Field(
+        ...,
+        description="Quantidade de titulos em cobranca descontada",
+        example="000000",
+        min_length=6,
+        max_length=6,
+    )
+    discounted_billing_value: str = Field(
+        ...,
+        description="Valor total dos titulos em cobranca descontada",
+        example=" " * 17,
+        min_length=17,
+        max_length=17,
+    )
+    launch_notice_number: str = Field(
+        ...,
+        description="Numero do aviso de lancamento",
+        example=" " * 8,
+        min_length=8,
+        max_length=8,
+    )
+    filler_2: str = Field(..., description="Uso Exclusivo NEXXERA", example=" " * 117, min_length=117, max_length=117)
 
 
 class NexxeraShippingSchema(BaseModel):
