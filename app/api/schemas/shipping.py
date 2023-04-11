@@ -201,7 +201,7 @@ class SegmentPSchema(FileLineSchema):
         min_length=1,
         max_length=1,
     )
-    billet_issue_date: str = Field(..., description="Emissao do bloqueto", example="0", min_length=1, max_length=1)
+    billet_issue: str = Field(..., description="Emissao do bloqueto", example="1", min_length=1, max_length=1)
     billet_distribution: str = Field(
         ...,
         description="Distribuicao do bloqueto",

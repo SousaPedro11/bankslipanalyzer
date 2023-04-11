@@ -35,8 +35,6 @@ class BankSlipShippingService:
         elif re.match(validators.regex_file_trailer_nexxera(), line):
             self.__generate_file_trailer(line_number, line, shipping)
 
-        print(shipping)
-
     def __generate_file_trailer(self, line_number: int, line, shipping):
         groups = re.match(validators.regex_file_trailer_nexxera(), line).groupdict()
         shipping["trailer_file"] = shipping_schema.FileTrailerSchema(
@@ -140,7 +138,7 @@ class BankSlipShippingService:
                 wallet_code=groups["carteira_codigo"],
                 registration_type=groups["cadastramento"],
                 billing_document=groups["documento"],
-                billet_issue_date=groups["emissao_bloqueto"],
+                billet_issue=groups["emissao_bloqueto"],
                 billet_distribution=groups["distribuicao_bloqueto"],
                 billing_document_number=groups["documento_numero"],
                 due_date=groups["vencimento"],
