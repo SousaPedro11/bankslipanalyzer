@@ -16,11 +16,6 @@ jobs:
     uses: ./.github/workflows/python-linting.yml
     with:
       project: app
-  # testing:
-  #   uses: ./.github/workflows/python-testing.yml
-  #   with:
-  #     project: bills-to-pay
-  # ci:
-  #   uses: ./.github/workflows/ci.yml
-  #   with:
-  #     project: bills-to-pay
+  deploy:
+    depends-on: linting
+    uses: ./.github/workflows/deploy-fly.yml
