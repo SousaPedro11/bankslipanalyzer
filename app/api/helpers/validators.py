@@ -1,8 +1,18 @@
 import re
 
+from starlette.exceptions import HTTPException
 
-def validate_file_extension(file_name: str, extension: str) -> bool:
-    return file_name.upper().endswith(extension)
+
+def validate_file_extension(file_name: str, extension: str):
+    if not file_name.upper().endswith(extension):
+        raise HTTPException(status_code=400, detail=f"Invalid file extension. Expected {extension}")
+
+
+def validate_lpn_file(file_name: str):
+    regex = "LPN\\d{1,16}.REM"
+
+    if not (re.match(regex, file_name) or validate_file_extension(file_name, ".REM")):
+        raise HTTPException(status_code=400, detail="Invalid file name. Expected LPN*.REM")
 
 
 def regex_digitable_line() -> str:
