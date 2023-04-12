@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from app.api.helpers.handler import register_exception_handlers
 from app.api.router import api_router
 from app.settings import settings
 
@@ -28,6 +29,8 @@ def get_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    register_exception_handlers(app)
 
     app.include_router(api_router, prefix=settings.PREFIX)
 
