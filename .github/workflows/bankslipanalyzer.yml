@@ -17,3 +17,4 @@ jobs:
   deploy:
     needs: linting
     uses: ./.github/workflows/deploy-fly.yml
+    secrets: inherit
