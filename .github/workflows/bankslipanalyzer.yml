@@ -4,11 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - develop
       - main
   pull_request:
     branches:
-      - develop
       - main
 
 jobs:
@@ -19,3 +17,5 @@ jobs:
   deploy:
     depends-on: linting
     uses: ./.github/workflows/deploy-fly.yml
+    with:
+      project: app
