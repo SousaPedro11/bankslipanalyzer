@@ -17,5 +17,3 @@ jobs:
   deploy:
     needs: linting
     uses: ./.github/workflows/deploy-fly.yml
-    with:
-      project: app
