@@ -3,9 +3,19 @@ name: bankslipanalyzer - Linting & Test
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'app/**'
+      - 'bank_return/**'
+      - 'bank_shipping/**'
+      - 'bank_slip/**'
     branches:
       - main
   pull_request:
+    paths:
+      - 'app/**'
+      - 'bank_return/**'
+      - 'bank_shipping/**'
+      - 'bank_slip/**'
     branches:
       - main
 
