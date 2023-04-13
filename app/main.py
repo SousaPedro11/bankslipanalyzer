@@ -4,6 +4,9 @@ from starlette.middleware.cors import CORSMiddleware
 from app.api.helpers.handler import register_exception_handlers
 from app.api.router import api_router
 from app.settings import settings
+from bank_return.app.api.router import return_router
+from bank_shipping.app.api.router import shipping_router
+from bank_slip.app.api.router import bank_slip_router
 
 
 def get_app():
@@ -19,8 +22,8 @@ def get_app():
         docs_url=f"{settings.PREFIX}/docs" if not settings.PRODUCTION else None,
         redoc_url=f"{settings.PREFIX}/redoc" if not settings.PRODUCTION else None,
         contact={
-            "name": "Desenvolvimento Koper",
-            "url": "https://koper.com.br/",
+            "name": "Sousa & Sousa Software Development Ltda",
+            "email": "sousapedro11.ti@gmail.com",
         },
     )
 
@@ -33,6 +36,9 @@ def get_app():
     register_exception_handlers(app)
 
     app.include_router(api_router, prefix=settings.PREFIX)
+    app.include_router(bank_slip_router, prefix=settings.PREFIX)
+    app.include_router(shipping_router, prefix=settings.PREFIX)
+    app.include_router(return_router, prefix=settings.PREFIX)
 
     if settings.SENTRY_DSN:
         import sentry_sdk

@@ -89,7 +89,7 @@ class BarcodeService:
         return due_date_from_factor(self.barcode.due_date_factor)
 
     def validate(self, barcode: str):
-        from app.services.digitable_line import DigitableLineService
+        from bank_slip.app.services.digitable_line import DigitableLineService
 
         self.original_barcode = self.__get_original_barcode_object(barcode)
         self.barcode = BarcodeOutputSchema(**self.original_barcode.dict())

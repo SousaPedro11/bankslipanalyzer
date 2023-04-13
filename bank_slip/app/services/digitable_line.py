@@ -82,7 +82,7 @@ class DigitableLineService:
         return module_10(digits)
 
     def get_barcode_by_digitable_line(self, digitable_line: DigitableLineSchema):
-        from app.services.barcode import BarcodeService
+        from bank_slip.app.services.barcode import BarcodeService
 
         field_1 = digitable_line.field_1.replace(".", "")
         field_2 = digitable_line.field_2.replace(".", "")

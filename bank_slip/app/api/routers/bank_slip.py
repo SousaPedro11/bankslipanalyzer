@@ -6,8 +6,8 @@ from app.api.schemas.bank_slip import (
     DigitableLineInputSchema,
     DigitableLineOutputSchema,
 )
-from app.services.barcode import BarcodeService
-from app.services.digitable_line import DigitableLineService
+from bank_slip.app.services.barcode import BarcodeService
+from bank_slip.app.services.digitable_line import DigitableLineService
 
 router = APIRouter()
 
@@ -35,7 +35,6 @@ async def validate_by_barcode(
     barcode: BarcodeInputSchema,
     service=Depends(get_barcode_service),
 ):
-
     result = service.validate(barcode.barcode)
 
     return result
