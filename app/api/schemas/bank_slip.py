@@ -197,7 +197,6 @@ class BarcodeOutputSchema(BarcodeSchema):
 
 
 class DigitableLineOutputSchema(DigitableLineSchema):
-
     barcode: Optional[BarcodeOutputSchema] = Field(
         description="Barcode",
         default=None,

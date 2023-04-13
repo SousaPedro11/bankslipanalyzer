@@ -284,7 +284,7 @@ def regex_y_segment_nexxera():
     return ""
 
 
-def is_segment_nexxera(line: str) -> bool:
+def is_shipping_segment_nexxera(line: str) -> bool:
     segments_pattern = [
         regex_p_segment_nexxera(),
         regex_q_segment_nexxera(),
