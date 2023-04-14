@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from starlette.exceptions import HTTPException
 
@@ -128,10 +129,6 @@ def regex_lot_header_nexxera():
         "(?P<filler_3>\\s{26})",  # Uso Exclusivo NEXXERA
         "$",
     ]
-
-    # stro = (
-    # "^(?<banco>\d{3})(?<lote>\d{4})(?<registro>1)(?<operacao>.{1})(?<servico>\d{2})(?<filler>\s{2})(?<versao_layout>\d{3})(?<filler_2>\s{1})(?<inscricao_tipo>\d)(?<inscricao_numero>\d{15})(?<convenio>.{20})(?<agencia_codigo>\d{5})(?<agencia_dv>.{1})(?<conta_numero>\d{12})(?<conta_dv>.{1})(?<ag_conta_dv>.{1})(?<empresa_nome>.{30})(?<mensagem>.{40})(?<mensagem_2>.{40})(?<numero_remessa>\d{8})(?<data_gravacao>\d{8})(?<data_credito>\d{8})(?<modelo_cod>\.{7})(?<filler_3>\s{26})$",
-    # )
 
     return "".join(regex_components)
 
@@ -276,12 +273,66 @@ def regex_s_segment_nexxera():
     return ""
 
 
+def regex_t_segment_nexxera():
+    """
+    Regex to validate the T segment from Nexxera
+    :return:
+    """
+    regex_components = [
+        "^(?P<banco>\\d{3})",  # Cod. do Banco na Compensacao
+        "(?P<lote>\\d{4})",  # Lote de servico
+        "(?P<registro>3)",  # Tipo de registro
+        "(?P<numero_registro>\\d{5})",  # Numero sequencial do registro no lote
+        "(?P<segmento>T)",  # Codigo do segmento do registro detalhe
+        "(?P<filler>\\s{1})",  # Uso Exclusivo NEXXERA
+        "(?P<movimento_codigo>.{2})",  # Codigo de movimento remessa
+        "(?P<agencia_codigo>\\d{5})",  # Agencia mantenedora da conta
+        "(?P<agencia_dv>.{1})",  # DV da agencia mantenedora da conta
+        "(?P<conta_numero>\\d{12})",  # Numero da conta corrente
+        "(?P<conta_dv>.{1})",  # DV da conta corrente
+        "(?P<agencia_conta_dv>.{1})",  # DV da agencia/conta
+        "(?P<nosso_numero>.{20})",  # Identificacao do titulo no banco
+        "(?P<carteira_codigo>.{1})",  # Codigo da carteira
+        "(?P<documento_numero>.{15})",  # Numero do documento de cobranca
+        "(?P<vencimento_data>\\d{8})",  # Data de vencimento do titulo
+        "(?P<valor>\\d{15})",  # Valor nominal do titulo
+        "(?P<banco_recebedor_codigo>\\d{3})",  # Codigo do banco recebedor
+        "(?P<agencia_recebedora_codigo>\\d{5})",  # Agencia recebedora
+        "(?P<agencia_recebedora_dv>.{1})",  # DV da agencia recebedora
+        "(?P<exclusivo_empresa>.{25})",  # Uso Exclusivo da Empresa
+        "(?P<moeda_codigo>\\d{2})",  # Codigo da moeda
+        "(?P<sacado_tipo_inscricao>\\d{1})",  # Tipo de inscricao do sacado
+        "(?P<sacado_numero_inscricao>\\d{15})",  # Numero de inscricao do sacado
+        "(?P<sacado_nome>.{40})",  # Nome do sacado
+        "(?P<contrato_numero>\\d{10})",  # Numero do contrato
+        "(?P<tarifa_valor>\\d{15})",  # Valor da tarifa
+        "(?P<ocorrencia_motivo>.{10})",  # Motivo da ocorrencia
+        "(?P<filler_1>.{14})",  # Uso Exclusivo NEXXERA
+        "(?P<variacao_carteira_codigo>\\d{3})",  # Codigo da variacao da carteira
+        "$",
+    ]
+
+    return "".join(regex_components)
+
+
+def regex_u_segment_nexxera():
+    return ""
+
+
 def regex_v_segment_nexxera():
+    return ""
+
+
+def regex_w_segment_nexxera():
     return ""
 
 
 def regex_y_segment_nexxera():
     return ""
+
+
+def verify_segment_pattern(line: str, segments_pattern: List[str]):
+    return any(re.match(pattern, line) for pattern in segments_pattern)
 
 
 def is_shipping_segment_nexxera(line: str) -> bool:
@@ -291,7 +342,15 @@ def is_shipping_segment_nexxera(line: str) -> bool:
         regex_r_segment_nexxera(),
     ]
 
-    return any(re.match(pattern, line) for pattern in segments_pattern)
+    return verify_segment_pattern(line, segments_pattern)
+
+
+def is_return_segment_nexxera(line: str) -> bool:
+    segments_pattern = [
+        regex_t_segment_nexxera(),
+    ]
+
+    return verify_segment_pattern(line, segments_pattern)
 
 
 def regex_lot_trailer_nexxera() -> str:

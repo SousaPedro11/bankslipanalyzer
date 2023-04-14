@@ -1,4 +1,4 @@
-from typing import List, Optional, Text
+from typing import List, Optional, Text, Union
 
 from pydantic import BaseModel, Field
 
@@ -443,14 +443,190 @@ class SegmentSSchema(FileLineSchema):
         load_only = ["segment_name"]
 
 
-class SegmentYSchema(FileLineSchema):
+class SegmentTSchema(FileLineSchema):
     segment_name: Optional[str] = Field(
-        "Y",
+        "T",
         description="Segment name",
-        example="Y",
+        example="T",
         min_length=1,
         max_length=1,
-        regex="Y",
+        regex="T",
+    )
+    bank: str = Field(..., description="Cod. do Banco na Compensacao", example="104", min_length=3, max_length=3)
+    service_lot: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
+    record_type: str = Field(..., description="Tipo de registro", example="3", min_length=1, max_length=1)
+    record_number: str = Field(
+        ...,
+        description="Numero sequencial do registro no lote",
+        example="00001",
+        min_length=5,
+        max_length=5,
+    )
+    segment_code: str = Field(
+        ...,
+        description="Codigo do segmento do registro detalhe",
+        example="T",
+        min_length=1,
+        max_length=1,
+    )
+    filler: str = Field(..., description="Uso Exclusivo NEXXERA", example=" " * 1, min_length=1, max_length=1)
+    return_movement_code: str = Field(
+        ...,
+        description="Codigo de movimento retorno",
+        example="01",
+        min_length=2,
+        max_length=2,
+    )
+    maintaining_agency_code: str = Field(
+        ...,
+        description="Agencia mantenedora da conta",
+        example="00000",
+        min_length=5,
+        max_length=5,
+    )
+    agency_dv: str = Field(..., description="Digito verificador da agencia", example="0", min_length=1, max_length=1)
+    checking_account_number: str = Field(
+        ...,
+        description="Numero da conta corrente",
+        example="0" * 12,
+        min_length=12,
+        max_length=12,
+    )
+    account_dv: str = Field(..., description="Digito verificador da conta", example="0", min_length=1, max_length=1)
+    agency_account_dv: str = Field(
+        ...,
+        description="Digito verificador da agencia/conta",
+        example="0",
+        min_length=1,
+        max_length=1,
+    )
+    our_number: str = Field(..., description="Nosso numero", example="0" * 20, min_length=20, max_length=20)
+    wallet_code: str = Field(..., description="Codigo da carteira", example="1", min_length=1, max_length=1)
+    billing_document_number: str = Field(
+        ...,
+        description="Numero do documento de cobranca",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    due_date: str = Field(
+        ...,
+        description="Data de vencimento do titulo",
+        example="00000000",
+        min_length=8,
+        max_length=8,
+    )
+    nominal_value: str = Field(
+        ...,
+        description="Valor nominal do titulo",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    bank_number: str = Field(
+        ...,
+        description="Numero do banco cobrador",
+        example="0" * 3,
+        min_length=3,
+        max_length=3,
+    )
+    collection_agency_code: str = Field(
+        ...,
+        description="Agencia cobradora",
+        example="00000",
+        min_length=5,
+        max_length=5,
+    )
+    collection_agency_dv: str = Field(
+        ...,
+        description="Digito verificador da agencia cobradora",
+        example="0",
+        min_length=1,
+        max_length=1,
+    )
+    enterprise_use: str = Field(
+        ...,
+        description="Uso da empresa",
+        example=" " * 25,
+        min_length=25,
+        max_length=25,
+    )
+    currency_code: str = Field(
+        ...,
+        description="Codigo da moeda",
+        example="09",
+        min_length=2,
+        max_length=2,
+    )
+    payee_type: str = Field(
+        ...,
+        description="Tipo de inscricao",
+        example="1",
+        min_length=1,
+        max_length=1,
+    )
+    payee_number: str = Field(
+        ...,
+        description="Numero de inscricao",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    payee_name: str = Field(
+        ...,
+        description="Nome",
+        example=" " * 40,
+        min_length=40,
+        max_length=40,
+    )
+    contract_number: str = Field(
+        ...,
+        description="Numero do contrato",
+        example=" " * 10,
+        min_length=10,
+        max_length=10,
+    )
+    tax_value: str = Field(
+        ...,
+        description="Valor das tarifas/custos",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    ocurrency_description: str = Field(
+        ...,
+        description="Motivo da ocorrencia para retorno",
+        example=" " * 10,
+        min_length=10,
+        max_length=10,
+    )
+    filler_1: str = Field(
+        ...,
+        description="Uso Exclusivo NEXXERA",
+        example=" " * 14,
+        min_length=14,
+        max_length=14,
+    )
+    variation_code: str = Field(
+        ...,
+        description="Codigo da variacao carteira",
+        example="000",
+        min_length=3,
+        max_length=3,
+    )
+
+    class Config:
+        load_only = ["segment_name"]
+
+
+class SegmentUSchema(FileLineSchema):
+    segment_name: Optional[str] = Field(
+        "U",
+        description="Segment name",
+        example="U",
+        min_length=1,
+        max_length=1,
+        regex="U",
     )
 
     class Config:
@@ -465,6 +641,34 @@ class SegmentVSchema(FileLineSchema):
         min_length=1,
         max_length=1,
         regex="V",
+    )
+
+    class Config:
+        load_only = ["segment_name"]
+
+
+class SegmentWSchema(FileLineSchema):
+    segment_name: Optional[str] = Field(
+        "W",
+        description="Segment name",
+        example="W",
+        min_length=1,
+        max_length=1,
+        regex="W",
+    )
+
+    class Config:
+        load_only = ["segment_name"]
+
+
+class SegmentYSchema(FileLineSchema):
+    segment_name: Optional[str] = Field(
+        "Y",
+        description="Segment name",
+        example="Y",
+        min_length=1,
+        max_length=1,
+        regex="Y",
     )
 
     class Config:
@@ -549,18 +753,33 @@ class LotTrailerSchema(FileLineSchema):
     filler_2: str = Field(..., description="Uso Exclusivo NEXXERA", example=" " * 117, min_length=117, max_length=117)
 
 
-class NexxeraShippingSchema(BaseModel):
-    segment_p: SegmentPSchema
-    segment_q: SegmentQSchema
-    segment_r: Optional[SegmentRSchema]
-    segment_s: Optional[SegmentSSchema]
-    segment_y: Optional[SegmentYSchema]
-    segment_v: Optional[SegmentVSchema]
-
-
 class ShippingFileSchema(BaseModel):
     header_file: FileHeaderSchema
     header_lot: LotHeaderSchema
-    shippings: List[NexxeraShippingSchema]
+    segments: List[
+        Union[
+            SegmentPSchema,
+            SegmentQSchema,
+            SegmentRSchema,
+            SegmentSSchema,
+            SegmentYSchema,
+            SegmentVSchema,
+        ]
+    ]
+    trailer_lot: LotTrailerSchema
+    trailer_file: FileTrailerSchema
+
+
+class ReturnFileSchema(BaseModel):
+    header_file: FileHeaderSchema
+    header_lot: LotHeaderSchema
+    segments: List[
+        Union[
+            SegmentTSchema,
+            SegmentUSchema,
+            SegmentWSchema,
+            SegmentYSchema,
+        ]
+    ]
     trailer_lot: LotTrailerSchema
     trailer_file: FileTrailerSchema

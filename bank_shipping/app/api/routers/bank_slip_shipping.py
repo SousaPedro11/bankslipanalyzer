@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, File, UploadFile
 
 from app.api.helpers.validators import validate_lpn_file
-from app.api.schemas.nexxera_document import ShippingInputSchema
+from app.api.schemas.nexxera_document import ShippingFileSchema, ShippingInputSchema
 from bank_shipping.app.services.shipping import BankSlipShippingService
 
 router = APIRouter()
@@ -18,7 +18,7 @@ async def validate_shipping(shipping: ShippingInputSchema, service=Depends(get_b
     return "In development"
 
 
-@router.post("/shipping/lpn/file")
+@router.post("/shipping/lpn/file", response_model=ShippingFileSchema)
 async def validate_shipping_file(
     file: UploadFile = File(description="LPN .REM file to be validated"),
     service=Depends(get_bank_slip_shipping_service),
