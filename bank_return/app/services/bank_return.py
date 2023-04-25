@@ -49,6 +49,36 @@ class BankSlipReturnNexxeraService(BaseDocumentService):
                 filler_1=groups["filler_1"],
                 variation_code=groups["variacao_carteira_codigo"],
             )
+        elif re.match(validators.regex_u_segment_nexxera(), line):
+            groups = re.match(validators.regex_u_segment_nexxera(), line).groupdict()
+
+            segment = nexxera_document.SegmentUSchema(
+                file_line=line_number,
+                bank=groups["banco"],
+                service_lot=groups["lote"],
+                record_type=groups["registro"],
+                record_number=groups["numero_registro"],
+                segment_code=groups["segmento"],
+                filler=groups["filler"],
+                return_movement_code=groups["movimento_codigo"],
+                title_accruals=groups["titulo_acrescimos"],
+                title_discount=groups["titulo_desconto"],
+                title_rebate=groups["titulo_abatimento"],
+                title_iof=groups["titulo_iof"],
+                title_paid=groups["titulo_pago"],
+                title_liquid=groups["titulo_liquido"],
+                other_costs=groups["outros_custos"],
+                other_credits=groups["outros_creditos"],
+                ocurrence_date=groups["data_ocorrencia"],
+                credit_date=groups["data_credito"],
+                withdrawn_occurrence_code=groups["sacado_ocorrencia_codigo"],
+                withdrawn_occurrence_date=groups["sacado_ocorrencia_data"],
+                withdrawn_occurrence_value=groups["sacado_ocorrencia_valor"],
+                withdrawn_occurrence_complement=groups["sacado_ocorrencia_complemento"],
+                corresponding_bank_code=groups["banco_correspondente_codigo"],
+                corresponding_bank_our_number=groups["banco_correspondente_nosso_numero"],
+                filler_1=groups["filler_1"],
+            )
 
         if segment:
             document["segments"].append(segment)

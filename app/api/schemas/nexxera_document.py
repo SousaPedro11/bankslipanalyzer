@@ -628,6 +628,191 @@ class SegmentUSchema(FileLineSchema):
         max_length=1,
         regex="U",
     )
+    bank: str = Field(
+        ...,
+        description="Cod. do Banco na Compensacao",
+        example="104",
+        min_length=3,
+        max_length=3,
+    )
+    service_lot: str = Field(
+        ...,
+        description="Lote de servico",
+        example="0001",
+        min_length=4,
+        max_length=4,
+    )
+    record_type: str = Field(
+        ...,
+        description="Tipo de registro",
+        example="3",
+        min_length=1,
+        max_length=1,
+    )
+    record_number: str = Field(
+        ...,
+        description="Numero sequencial do registro no lote",
+        example="00001",
+        min_length=5,
+        max_length=5,
+    )
+    segment_code: str = Field(
+        ...,
+        description="Codigo do segmento do registro detalhe",
+        example="U",
+        min_length=1,
+        max_length=1,
+    )
+    filler: str = Field(
+        ...,
+        description="Uso Exclusivo NEXXERA",
+        example=" " * 1,
+        min_length=1,
+        max_length=1,
+    )
+    return_movement_code: str = Field(
+        ...,
+        description="Codigo de movimento retorno",
+        example="01",
+        min_length=2,
+        max_length=2,
+    )
+
+    title_accruals: str = Field(
+        ...,
+        description="Valor dos juros / multa / encargos",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    title_discount: str = Field(
+        ...,
+        description="Valor do desconto concedido",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    title_rebate: str = Field(
+        ...,
+        description="Valor do abatimento concedido",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    title_iof: str = Field(
+        ...,
+        description="Valor do IOF recolhido",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    title_paid: str = Field(
+        ...,
+        description="Valor pago pelo sacado",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    title_liquid: str = Field(
+        ...,
+        description="Valor liquido a ser creditado",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    other_costs: str = Field(
+        ...,
+        description="Valor de outras despesas",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    other_credits: str = Field(
+        ...,
+        description="Valor de outros creditos",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    ocurrence_date: str = Field(
+        ...,
+        description="Data da ocorrencia",
+        example="0" * 8,
+        min_length=8,
+        max_length=8,
+    )
+
+    credit_date: str = Field(
+        ...,
+        description="Data do credito",
+        example="0" * 8,
+        min_length=8,
+        max_length=8,
+    )
+
+    withdrawn_occurrence_code: str = Field(
+        ...,
+        description="Codigo da ocorrencia do sacado",
+        example="0" * 4,
+        min_length=4,
+        max_length=4,
+    )
+
+    withdrawn_occurrence_date: str = Field(
+        ...,
+        description="Data da ocorrencia do sacado",
+        example="0" * 8,
+        min_length=8,
+        max_length=8,
+    )
+
+    withdrawn_occurrence_value: str = Field(
+        ...,
+        description="Valor da ocorrencia do sacado",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+
+    withdrawn_occurrence_complement: str = Field(
+        ...,
+        description="Complemento da ocorrencia do sacado",
+        example="0" * 30,
+        min_length=30,
+        max_length=30,
+    )
+
+    corresponding_bank_code: str = Field(
+        ...,
+        description="Código do banco correspondente",
+        example="0" * 3,
+        min_length=3,
+        max_length=3,
+    )
+
+    corresponding_bank_our_number: str = Field(
+        ...,
+        description="Nosso numero no banco correspondente",
+        example="0" * 20,
+        min_length=20,
+        max_length=20,
+    )
+
+    filler_1: str = Field(
+        ...,
+        description="Uso Exclusivo NEXXERA",
+        example=" " * 7,
+        min_length=7,
+        max_length=7,
+    )
 
     class Config:
         load_only = ["segment_name"]

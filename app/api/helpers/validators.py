@@ -285,7 +285,7 @@ def regex_t_segment_nexxera():
         "(?P<numero_registro>\\d{5})",  # Numero sequencial do registro no lote
         "(?P<segmento>T)",  # Codigo do segmento do registro detalhe
         "(?P<filler>\\s{1})",  # Uso Exclusivo NEXXERA
-        "(?P<movimento_codigo>.{2})",  # Codigo de movimento remessa
+        "(?P<movimento_codigo>.{2})",  # Codigo de movimento retorno
         "(?P<agencia_codigo>\\d{5})",  # Agencia mantenedora da conta
         "(?P<agencia_dv>.{1})",  # DV da agencia mantenedora da conta
         "(?P<conta_numero>\\d{12})",  # Numero da conta corrente
@@ -316,7 +316,41 @@ def regex_t_segment_nexxera():
 
 
 def regex_u_segment_nexxera():
-    return ""
+    """
+    Method to return the regex to validate the U segment from Nexxera
+
+    Returns:
+        str: regex to validate the U segment
+    """
+    regex_components = [
+        "^(?P<banco>\\d{3})",  # Cod. do Banco na Compensacao
+        "(?P<lote>\\d{4})",  # Lote de servico
+        "(?P<registro>3)",  # Tipo de registro
+        "(?P<numero_registro>\\d{5})",  # Numero sequencial do registro no lote
+        "(?P<segmento>U)",  # Codigo do segmento do registro detalhe
+        "(?P<filler>\\s{1})",  # Uso Exclusivo NEXXERA
+        "(?P<movimento_codigo>.{2})",  # Codigo de movimento retorno
+        "(?P<titulo_acrescimos>\\d{15})",  # Juros / Multa / Encargos
+        "(?P<titulo_desconto>\\d{15})",  # Valor do desconto concedido
+        "(?P<titulo_abatimento>\\d{15})",  # Valor do abatimento concedido
+        "(?P<titulo_iof>\\d{15})",  # Valor do IOF recolhido
+        "(?P<titulo_pago>\\d{15})",  # Valor pago pelo sacado
+        "(?P<titulo_liquido>\\d{15})",  # Valor liquido a ser creditado
+        "(?P<outros_custos>\\d{15})",  # Outras despesas
+        "(?P<outros_creditos>\\d{15})",  # Outros creditos
+        "(?P<data_ocorrencia>\\d{8})",  # Data da ocorrencia
+        "(?P<data_credito>\\d{8})",  # Data do credito
+        "(?P<sacado_ocorrencia_codigo>.{4})",  # Codigo da ocorrencia do sacado
+        "(?P<sacado_ocorrencia_data>.{8})",  # Data da ocorrencia do sacado
+        "(?P<sacado_ocorrencia_valor>\\d{15})",  # Valor da ocorrencia do sacado
+        "(?P<sacado_ocorrencia_complemento>.{30})",  # Complemento da ocorrencia do sacado
+        "(?P<banco_correspondente_codigo>\\d{3})",  # Codigo do banco correspondente compensacao
+        "(?P<banco_correspondente_nosso_numero>.{20})",  # Nosso numero banco correspondente
+        "(?P<filler_1>.{7})",  # Uso Exclusivo NEXXERA
+        "$",
+    ]
+
+    return "".join(regex_components)
 
 
 def regex_v_segment_nexxera():
@@ -340,6 +374,9 @@ def is_shipping_segment_nexxera(line: str) -> bool:
         regex_p_segment_nexxera(),
         regex_q_segment_nexxera(),
         regex_r_segment_nexxera(),
+        regex_s_segment_nexxera(),
+        regex_v_segment_nexxera(),
+        regex_y_segment_nexxera(),
     ]
 
     return verify_segment_pattern(line, segments_pattern)
@@ -348,6 +385,9 @@ def is_shipping_segment_nexxera(line: str) -> bool:
 def is_return_segment_nexxera(line: str) -> bool:
     segments_pattern = [
         regex_t_segment_nexxera(),
+        regex_u_segment_nexxera(),
+        regex_w_segment_nexxera(),
+        regex_y_segment_nexxera(),
     ]
 
     return verify_segment_pattern(line, segments_pattern)
