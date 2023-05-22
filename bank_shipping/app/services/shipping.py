@@ -130,13 +130,13 @@ class BankSlipShippingService(BaseDocumentService):
             )
         elif re.match(validators.regex_s_segment_nexxera(), line):
             groups = re.match(validators.regex_s_segment_nexxera(), line).groupdict()
-            segment = nexxera_document.SegmentSSchema(file_line=line_number)
+            # segment = nexxera_document.SegmentSSchema(file_line=line_number)
         elif re.match(validators.regex_v_segment_nexxera(), line):
             groups = re.match(validators.regex_v_segment_nexxera(), line).groupdict()
-            segment = nexxera_document.SegmentVSchema(file_line=line_number)
+            # segment = nexxera_document.SegmentVSchema(file_line=line_number)
         elif re.match(validators.regex_y_segment_nexxera(), line):
             groups = re.match(validators.regex_y_segment_nexxera(), line).groupdict()
-            segment = nexxera_document.SegmentYSchema(file_line=line_number)
+            # segment = nexxera_document.SegmentYSchema(file_line=line_number)
 
         if segment:
             document["segments"].append(segment)
