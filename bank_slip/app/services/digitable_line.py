@@ -7,7 +7,7 @@ from app.api.schemas.bank_slip import BarcodeSchema, DigitableLineOutputSchema, 
 
 
 class DigitableLineService:
-    def __init__(self):
+    def __init__(self) -> None:
         self.original_digitable_line: Optional[DigitableLineSchema] = None
         self.digitable_line: Optional[DigitableLineOutputSchema] = None
 
@@ -64,7 +64,7 @@ class DigitableLineService:
             field_2=field_2,
             field_3=field_3,
             field_4=barcode.vd_general,
-            field_5="".join([barcode.due_date_factor, barcode.document_value]),
+            field_5=f"{barcode.due_date_factor}{barcode.document_value}",
         )
 
     def validate(self, digitable_line: str):

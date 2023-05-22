@@ -1,0 +1,15 @@
+select = ["F", "C90", "PL", "B", "E", "W", "ANN", "COM", "I", "N", "S", "BLE", "A", "C4", "DTZ", "T10", "EM", "EXE", "FA", "ASYNC", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "TID", "TCH", "INT", "ARG", "PTH", "TD", "ERA", "PLE", "PLR", "PLW", "TRY", "FLY", "RUF"]
+
+line-length = 120
+
+extend-exclude = ["tests"]
+
+ignore = ["PLR0913", "B008", "B013", "ANN101", "ANN401", "PT021", "RET504"]
+
+target-version = "py38"
+
+[mccabe]
+max-complexity = 10
+
+[isort]
+combine-as-imports = true

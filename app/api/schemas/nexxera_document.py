@@ -424,6 +424,92 @@ class SegmentRSchema(FileLineSchema):
         max_length=1,
         regex="R",
     )
+    bank_code: str = Field(..., description="Cod. do Banco na Compensacao", example="756", min_length=3, max_length=3)
+    service_batch: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
+    record_type: str = Field(..., description="Tipo de registro", example="3", min_length=1, max_length=1)
+    record_number: str = Field(
+        ...,
+        description="Numero sequencial do registro no lote",
+        example="00001",
+        min_length=5,
+        max_length=5,
+    )
+    segment_code: str = Field(
+        ...,
+        description="Codigo do segmento do registro detalhe",
+        example="R",
+        min_length=1,
+        max_length=1,
+    )
+    filler: str = Field(..., description="Uso Exclusivo NEXXERA", example=" ", min_length=1, max_length=1)
+    transaction_code: str = Field(
+        ...,
+        description="Codigo de movimento remessa",
+        example="01",
+        min_length=2,
+        max_length=2,
+    )
+    discount_code_2: str = Field(..., description="Codigo de desconto2", example="1", min_length=1, max_length=1)
+    discount_date_2: str = Field(..., description="Data de desconto2", example="0" * 8, min_length=8, max_length=8)
+    discount_value_2: str = Field(..., description="Valor de desconto2", example="0" * 15, min_length=15, max_length=15)
+    discount_code_3: str = Field(..., description="Codigo de desconto3", example="1", min_length=1, max_length=1)
+    discount_date_3: str = Field(..., description="Data de desconto3", example="0" * 8, min_length=8, max_length=8)
+    discount_value_3: str = Field(..., description="Valor de desconto3", example="0" * 15, min_length=15, max_length=15)
+    late_fee_code: str = Field(..., description="Codigo de multa", example="1", min_length=1, max_length=1)
+    late_fee_date: str = Field(..., description="Data de multa", example="0" * 8, min_length=8, max_length=8)
+    late_fee_percentage: str = Field(
+        ...,
+        description="Valor percentual de multa",
+        example="0" * 15,
+        min_length=15,
+        max_length=15,
+    )
+    payee_information: str = Field(
+        ...,
+        description="Informacao ao sacado",
+        example=" " * 10,
+        min_length=10,
+        max_length=10,
+    )
+    message_3: str = Field(..., description="Mensagem 3", example=" " * 40, min_length=40, max_length=40)
+    message_4: str = Field(..., description="Mensagem 4", example=" " * 40, min_length=40, max_length=40)
+    filler_2: str = Field(..., description="Uso Exclusivo NEXXERA", example=" " * 8, min_length=8, max_length=8)
+    pay_book: str = Field(..., description="Carne de Pagamento", example=" " * 6, min_length=6, max_length=6)
+    portion_number: str = Field(..., description="Numero da parcela", example=" " * 3, min_length=3, max_length=3)
+    portion_quantity: str = Field(
+        ...,
+        description="Quantidade de parcelas",
+        example=" " * 3,
+        min_length=3,
+        max_length=3,
+    )
+    payee_ocurrence: str = Field(..., description="Ocorrencia do sacado", example=" " * 8, min_length=8, max_length=8)
+    debit_bank: str = Field(..., description="Banco de debito", example=" " * 3, min_length=3, max_length=3)
+    debit_agency: str = Field(..., description="Agencia de debito", example=" " * 5, min_length=5, max_length=5)
+    debit_agency_digit: str = Field(
+        ...,
+        description="Digito da agencia de debito",
+        example=" " * 1,
+        min_length=1,
+        max_length=1,
+    )
+    debit_account: str = Field(..., description="Conta de debito", example=" " * 12, min_length=12, max_length=12)
+    debit_account_digit: str = Field(
+        ...,
+        description="Digito da conta de debito",
+        example=" " * 1,
+        min_length=1,
+        max_length=1,
+    )
+    debit_agency_account_dv: str = Field(
+        ...,
+        description="Digito verificador da agencia/conta",
+        example=" " * 1,
+        min_length=1,
+        max_length=1,
+    )
+    debit_message: str = Field(..., description="Mensagem de debito", example=" " * 1, min_length=1, max_length=1)
+    filler_3: str = Field(..., description="Uso Exclusivo NEXXERA", example=" " * 9, min_length=9, max_length=9)
 
     class Config:
         load_only = ["segment_name"]

@@ -93,7 +93,41 @@ class BankSlipShippingService(BaseDocumentService):
             )
         elif re.match(validators.regex_r_segment_nexxera(), line):
             groups = re.match(validators.regex_r_segment_nexxera(), line).groupdict()
-            segment = nexxera_document.SegmentRSchema(file_line=line_number)
+            segment = nexxera_document.SegmentRSchema(
+                file_line=line_number,
+                bank_code=groups["banco"],
+                service_batch=groups["lote"],
+                record_type=groups["registro"],
+                record_number=groups["numero_registro"],
+                segment_code=groups["segmento"],
+                filler=groups["filler"],
+                transaction_code=groups["movimento_codigo"],
+                discount_code_2=groups["desconto_2_codigo"],
+                discount_date_2=groups["desconto_2_data"],
+                discount_value_2=groups["desconto_2_valor"],
+                discount_code_3=groups["desconto_3_codigo"],
+                discount_date_3=groups["desconto_3_data"],
+                discount_value_3=groups["desconto_3_valor"],
+                late_fee_code=groups["multa_codigo"],
+                late_fee_date=groups["multa_data"],
+                late_fee_percentage=groups["multa_valor"],
+                payee_information=groups["informacao_sacado"],
+                message_3=groups["informacao_3"],
+                message_4=groups["informacao_4"],
+                filler_2=groups["filler_2"],
+                pay_book=groups["carne_numero"],
+                portion_number=groups["carne_parcela"],
+                portion_quantity=groups["carne_total_parcelas"],
+                payee_ocurrence=groups["ocorrencia_sacado_codigo"],
+                debit_bank=groups["debito_banco_codigo"],
+                debit_agency=groups["debito_agencia_codigo"],
+                debit_agency_digit=groups["debito_agencia_dv"],
+                debit_account=groups["debito_conta_numero"],
+                debit_account_digit=groups["debito_conta_dv"],
+                debit_agency_account_dv=groups["debito_agencia_conta_dv"],
+                debit_message=groups["debito_automatico_aviso"],
+                filler_3=groups["filler_3"],
+            )
         elif re.match(validators.regex_s_segment_nexxera(), line):
             groups = re.match(validators.regex_s_segment_nexxera(), line).groupdict()
             segment = nexxera_document.SegmentSSchema(file_line=line_number)

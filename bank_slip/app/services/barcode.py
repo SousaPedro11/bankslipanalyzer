@@ -8,7 +8,7 @@ from app.api.schemas.bank_slip import BarcodeOutputSchema, BarcodeSchema
 
 
 class BarcodeService:
-    def __init__(self):
+    def __init__(self) -> None:
         self.original_barcode: Optional[BarcodeSchema] = None
         self.barcode: Optional[BarcodeOutputSchema] = None
 
@@ -50,21 +50,9 @@ class BarcodeService:
     def _calculate_general_verification_digit(self):
         beneficiary_code = self._calculate_beneficiary_code_verification_digit()
         return module_11(
-            "".join(
-                [
-                    self.barcode.bank,
-                    self.barcode.currency_code,
-                    self.barcode.due_date_factor,
-                    self.barcode.document_value,
-                    beneficiary_code,
-                    self.barcode.sequence_1,
-                    self.barcode.constant_1,
-                    self.barcode.sequence_2,
-                    self.barcode.constant_2,
-                    self.barcode.sequence_3,
-                    self.barcode.vd_field_free,
-                ],
-            ),
+            f"{self.barcode.bank}{self.barcode.currency_code}{self.barcode.due_date_factor}"
+            f"{self.barcode.document_value}{beneficiary_code}{self.barcode.sequence_1}{self.barcode.constant_1}"
+            f"{self.barcode.sequence_2}{self.barcode.constant_2}{self.barcode.sequence_3}{self.barcode.vd_field_free}",
             general=True,
         )
 
@@ -72,16 +60,8 @@ class BarcodeService:
     def _calculate_field_free_verification_digit(self):
         beneficiary_code = self._calculate_beneficiary_code_verification_digit()
         return module_11(
-            "".join(
-                [
-                    beneficiary_code,
-                    self.barcode.sequence_1,
-                    self.barcode.constant_1,
-                    self.barcode.sequence_2,
-                    self.barcode.constant_2,
-                    self.barcode.sequence_3,
-                ],
-            ),
+            f"{beneficiary_code}{self.barcode.sequence_1}{self.barcode.constant_1}{self.barcode.sequence_2}"
+            f"{self.barcode.constant_2}{self.barcode.sequence_3}",
         )
 
     @lru_cache

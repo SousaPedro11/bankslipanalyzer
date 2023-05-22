@@ -4,12 +4,12 @@ from typing import List
 from starlette.exceptions import HTTPException
 
 
-def validate_file_extension(file_name: str, extension: str):
+def validate_file_extension(file_name: str, extension: str) -> None:
     if not file_name.upper().endswith(extension):
         raise HTTPException(status_code=400, detail=f"Invalid file extension. Expected {extension}")
 
 
-def validate_lpn_file(file_name: str):
+def validate_lpn_file(file_name: str) -> None:
     regex = "LPN\\d{1,16}.REM"
 
     if not (re.match(regex, file_name) or validate_file_extension(file_name, ".REM")):

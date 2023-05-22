@@ -7,7 +7,7 @@ from app.api.schemas import nexxera_document
 
 
 class BaseDocumentService(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self.content: List[str] = []
 
     def __set_attributes(self):

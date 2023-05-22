@@ -13,7 +13,8 @@ class BarcodeInputSchema(BaseModel):
     def validate_barcode(cls, value: str) -> str:
         regex = re.compile(regex_barcode())
         if not regex.match(value):
-            raise ValueError("Must be 44 only numbers")
+            msg = "Must be 44 only numbers"
+            raise ValueError(msg)
 
         return value
 
@@ -26,8 +27,9 @@ class DigitableLineInputSchema(BaseModel):
         regex = re.compile(regex_digitable_line())
 
         if not regex.match(value):
+            msg = "Must be 47 only numbers or in the format 00000.00000 00000.000000 00000.000000 0 00000000000000"
             raise ValueError(
-                "Must be 47 only numbers or in the format 00000.00000 00000.000000 00000.000000 0 00000000000000",
+                msg,
             )
 
         return value

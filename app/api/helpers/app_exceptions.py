@@ -4,17 +4,17 @@ from starlette.responses import JSONResponse
 from app.api.helpers.mapper import CODE_ERRORS
 
 
-class AppExceptionCase(Exception):
-    def __init__(self, code: int, message: str):
+class AppExceptionCaseError(Exception):
+    def __init__(self, code: int, message: str) -> None:
         self.exception_case = self.__class__.__name__
         self.code = code
         self.message = message
 
     def __str__(self) -> str:
-        return f"<AppException {self.exception_case} - " + f"status_code={self.code} - context={self.message}>"
+        return f"<AppException {self.exception_case} - status_code={self.code} - context={self.message}>"
 
 
-async def app_exception_handler(_: Request, exc: AppExceptionCase) -> JSONResponse:
+async def app_exception_handler(_: Request, exc: AppExceptionCaseError) -> JSONResponse:
     return JSONResponse(
         status_code=exc.code,
         content={
@@ -25,38 +25,38 @@ async def app_exception_handler(_: Request, exc: AppExceptionCase) -> JSONRespon
 
 
 class AppException:
-    class InternalError(AppExceptionCase):
+    class InternalError(AppExceptionCaseError):
         """
         Any internal Error
         """
 
-        def __init__(self, message: str = "An unexpected error occurred"):
+        def __init__(self, message: str = "An unexpected error occurred") -> None:
             status_code = 500
-            AppExceptionCase.__init__(self, status_code, message)
+            AppExceptionCaseError.__init__(self, status_code, message)
 
-    class NotFoundError(AppExceptionCase):
+    class NotFoundError(AppExceptionCaseError):
         """
         Item Not Found
         """
 
-        def __init__(self, message: str):
+        def __init__(self, message: str) -> None:
             status_code = 404
-            AppExceptionCase.__init__(self, status_code, message)
+            AppExceptionCaseError.__init__(self, status_code, message)
 
-    class RequiresAuthError(AppExceptionCase):
+    class RequiresAuthError(AppExceptionCaseError):
         """
         Is not public and requires auth
         """
 
-        def __init__(self, message: str):
+        def __init__(self, message: str) -> None:
             status_code = 401
-            AppExceptionCase.__init__(self, status_code, message)
+            AppExceptionCaseError.__init__(self, status_code, message)
 
-    class ForbiddenError(AppExceptionCase):
+    class ForbiddenError(AppExceptionCaseError):
         """
         Is not public and requires auth
         """
 
-        def __init__(self, message: str):  # pragma: no cover
+        def __init__(self, message: str) -> None:  # pragma: no cover
             status_code = 403
-            AppExceptionCase.__init__(self, status_code, message)
+            AppExceptionCaseError.__init__(self, status_code, message)

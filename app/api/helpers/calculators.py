@@ -2,7 +2,12 @@ from pendulum import date, now
 
 
 def module_11(number: str, general: bool = False) -> int:
-    """Module 11 - Bank Slip"""
+    """
+    Module 11 - Bank Slip
+    :param number: number to be calculated
+    :param general: represents if the calculation is general DV or not
+    :return: DV
+    """
     number = number.replace(".", "").replace(" ", "")
     sum_ = 0
     for i, digit in enumerate(number[::-1]):
