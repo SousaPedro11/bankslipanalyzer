@@ -96,7 +96,7 @@ def regex_file_header_nexxera() -> str:
     return "".join(regex_components)
 
 
-def regex_lot_header_nexxera():
+def regex_lot_header_nexxera() -> str:
     """
     Regex to validate the lot header from Nexxera
     :return: str
@@ -133,7 +133,7 @@ def regex_lot_header_nexxera():
     return "".join(regex_components)
 
 
-def regex_p_segment_nexxera():
+def regex_p_segment_nexxera() -> str:
     """
     Regex to validate the P segment from Nexxera
     :return: str
@@ -188,7 +188,7 @@ def regex_p_segment_nexxera():
     return "".join(regex_components)
 
 
-def regex_q_segment_nexxera():
+def regex_q_segment_nexxera() -> str:
     """
     Regex to validate the Q segment from Nexxera
     :return:
@@ -225,7 +225,7 @@ def regex_q_segment_nexxera():
     return "".join(regex_components)
 
 
-def regex_r_segment_nexxera():
+def regex_r_segment_nexxera() -> str:
     """
     Regex to validate the R segment from Nexxera
     :return:
@@ -269,11 +269,11 @@ def regex_r_segment_nexxera():
     return "".join(regex_components)
 
 
-def regex_s_segment_nexxera():
+def regex_s_segment_nexxera() -> str:
     return ""
 
 
-def regex_t_segment_nexxera():
+def regex_t_segment_nexxera() -> str:
     """
     Regex to validate the T segment from Nexxera
     :return:
@@ -315,7 +315,7 @@ def regex_t_segment_nexxera():
     return "".join(regex_components)
 
 
-def regex_u_segment_nexxera():
+def regex_u_segment_nexxera() -> str:
     """
     Method to return the regex to validate the U segment from Nexxera
 
@@ -353,19 +353,19 @@ def regex_u_segment_nexxera():
     return "".join(regex_components)
 
 
-def regex_v_segment_nexxera():
+def regex_v_segment_nexxera() -> str:
     return ""
 
 
-def regex_w_segment_nexxera():
+def regex_w_segment_nexxera() -> str:
     return ""
 
 
-def regex_y_segment_nexxera():
+def regex_y_segment_nexxera() -> str:
     return ""
 
 
-def verify_segment_pattern(line: str, segments_pattern: List[str]):
+def verify_segment_pattern(line: str, segments_pattern: List[str]) -> bool:
     return any(re.match(pattern, line) for pattern in segments_pattern)
 
 

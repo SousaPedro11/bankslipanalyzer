@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import re
-from functools import lru_cache
+from functools import cached_property
 from typing import Optional
 
 from app.api.helpers.calculators import due_date_from_factor, module_11
@@ -12,7 +14,7 @@ class BarcodeService:
         self.original_barcode: Optional[BarcodeSchema] = None
         self.barcode: Optional[BarcodeOutputSchema] = None
 
-    def __get_original_barcode_object(self, barcode):
+    def __get_original_barcode_object(self, barcode: str) -> BarcodeSchema:
         groups = re.match(regex_barcode(), barcode).groupdict()
 
         return BarcodeSchema(
@@ -30,14 +32,15 @@ class BarcodeService:
             vd_field_free=groups["dv_campo_livre"],
         )
 
-    def _calculate_beneficiary_code_verification_digit(self):
+    def _calculate_beneficiary_code_verification_digit(self) -> str:
+        maximum_six_digits = 999999
         beneficiary_code = self.original_barcode.beneficiary_code
         dv_beneficiary_code = None
-        if beneficiary_code.endswith("0") and int(beneficiary_code[:-1]) <= 999999:
+        if beneficiary_code.endswith("0") and int(beneficiary_code[:-1]) <= maximum_six_digits:
             beneficiary_code = beneficiary_code[:-1]
             dv_beneficiary_code = module_11(beneficiary_code)
 
-        elif int(beneficiary_code) <= 999999 and not beneficiary_code.endswith("0"):
+        elif int(beneficiary_code) <= maximum_six_digits and not beneficiary_code.endswith("0"):
             beneficiary_code = str(int(beneficiary_code[:-1])).zfill(6)
             dv_beneficiary_code = module_11(beneficiary_code)
 
@@ -46,8 +49,8 @@ class BarcodeService:
         )
         return beneficiary_code
 
-    @lru_cache
-    def _calculate_general_verification_digit(self):
+    @cached_property
+    def _calculate_general_verification_digit(self) -> int:
         beneficiary_code = self._calculate_beneficiary_code_verification_digit()
         return module_11(
             f"{self.barcode.bank}{self.barcode.currency_code}{self.barcode.due_date_factor}"
@@ -56,19 +59,19 @@ class BarcodeService:
             general=True,
         )
 
-    @lru_cache
-    def _calculate_field_free_verification_digit(self):
+    @cached_property
+    def _calculate_field_free_verification_digit(self) -> int:
         beneficiary_code = self._calculate_beneficiary_code_verification_digit()
         return module_11(
             f"{beneficiary_code}{self.barcode.sequence_1}{self.barcode.constant_1}{self.barcode.sequence_2}"
             f"{self.barcode.constant_2}{self.barcode.sequence_3}",
         )
 
-    @lru_cache
-    def _get_due_date(self):
+    @cached_property
+    def _get_due_date(self) -> str:
         return due_date_from_factor(self.barcode.due_date_factor)
 
-    def validate(self, barcode: str):
+    def validate(self, barcode: str) -> BarcodeOutputSchema:
         from bank_slip.app.services.digitable_line import DigitableLineService
 
         self.original_barcode = self.__get_original_barcode_object(barcode)
@@ -79,12 +82,12 @@ class BarcodeService:
         self.barcode.expected_barcode.vd_field_free = None
 
         self.barcode.expected_barcode.vd_field_free = str(
-            self._calculate_field_free_verification_digit(),
+            self._calculate_field_free_verification_digit,
         )
         self.barcode.expected_barcode.vd_general = str(
-            self._calculate_general_verification_digit(),
+            self._calculate_general_verification_digit,
         )
-        self.barcode.due_date = self._get_due_date()
+        self.barcode.due_date = self._get_due_date
 
         self.barcode.expected_digitable_line = DigitableLineService().get_digitable_line_by_barcode(
             self.barcode.expected_barcode,

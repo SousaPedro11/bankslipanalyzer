@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseModel, Field, root_validator, validator
 
@@ -188,7 +188,7 @@ class BarcodeOutputSchema(BarcodeSchema):
     )
 
     @root_validator
-    def validate_barcode(cls, values):
+    def validate_barcode(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         barcode_expected = values.get("expected_barcode", None)
         if not (barcode_expected and values | barcode_expected.dict() == values):
             values["status"] = "barcode is invalid"
@@ -210,7 +210,7 @@ class DigitableLineOutputSchema(DigitableLineSchema):
     )
 
     @root_validator
-    def validate_digitable_line(cls, values):
+    def validate_digitable_line(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         barcode_expected = values.get("barcode", None)
         if not (barcode_expected and values | barcode_expected.expected_digitable_line.dict() == values):
             values["status"] = "digitable line is invalid"

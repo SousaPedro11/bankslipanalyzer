@@ -9,7 +9,7 @@ from bank_shipping.app.api.router import shipping_router
 from bank_slip.app.api.router import bank_slip_router
 
 
-def get_app():
+def get_app() -> FastAPI:
     """
     Create and configure an instance of the FastAPI application.
     :return: a FastAPI application instance

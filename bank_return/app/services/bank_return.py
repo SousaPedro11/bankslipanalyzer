@@ -6,13 +6,13 @@ from app.services.abstract.nexxera import BaseDocumentService
 
 
 class BankSlipReturnNexxeraService(BaseDocumentService):
-    def _set_document_attribute(self, line_number: int, line: str, document: dict):
+    def _set_document_attribute(self, line_number: int, line: str, document: dict) -> None:
         super()._set_document_attribute(line_number, line, document)
 
         if validators.is_return_segment_nexxera(line):
             self._generate_segment(line_number, line, document)
 
-    def _generate_segment(self, line_number: int, line, document):
+    def _generate_segment(self, line_number: int, line: str, document: dict) -> None:
         segment = None
         if re.match(validators.regex_t_segment_nexxera(), line):
             groups = re.match(validators.regex_t_segment_nexxera(), line).groupdict()

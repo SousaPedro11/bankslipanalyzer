@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import re
 from typing import List, Optional
 
 from app.api.helpers.calculators import module_10
 from app.api.helpers.validators import regex_digitable_line
-from app.api.schemas.bank_slip import BarcodeSchema, DigitableLineOutputSchema, DigitableLineSchema
+from app.api.schemas.bank_slip import BarcodeOutputSchema, BarcodeSchema, DigitableLineOutputSchema, DigitableLineSchema
 
 
 class DigitableLineService:
@@ -11,7 +13,7 @@ class DigitableLineService:
         self.original_digitable_line: Optional[DigitableLineSchema] = None
         self.digitable_line: Optional[DigitableLineOutputSchema] = None
 
-    def __get_original_digitable_line_object(self, digitable_line):
+    def __get_original_digitable_line_object(self, digitable_line: str) -> DigitableLineSchema:
         digitable_line = digitable_line.replace(" ", "").replace(".", "")
         groups = re.match(regex_digitable_line(), digitable_line).groupdict()
         return DigitableLineSchema(
@@ -22,15 +24,15 @@ class DigitableLineService:
             field_5=groups["campo_5"],
         )
 
-    def _generate_field_x(self, field_content: List, dot_position: int):
+    def _generate_field_x(self, field_content: List, dot_position: int) -> str:
         field_x_verification_digit = str(
             self._calculate_field_x_verification_digit("".join(field_content)),
         )
         field_content.append(field_x_verification_digit)
-        field_content = "".join(field_content)
-        return f"{field_content[:dot_position]}.{field_content[dot_position:]}"
+        field_content_str = "".join(field_content)
+        return f"{field_content_str[:dot_position]}.{field_content_str[dot_position:]}"
 
-    def get_digitable_line_by_barcode(self, barcode: BarcodeSchema):
+    def get_digitable_line_by_barcode(self, barcode: BarcodeSchema) -> DigitableLineSchema:
         field_1 = self._generate_field_x(
             [
                 barcode.bank,
@@ -67,7 +69,7 @@ class DigitableLineService:
             field_5=f"{barcode.due_date_factor}{barcode.document_value}",
         )
 
-    def validate(self, digitable_line: str):
+    def validate(self, digitable_line: str) -> DigitableLineOutputSchema:
         self.original_digitable_line = self.__get_original_digitable_line_object(
             digitable_line,
         )
@@ -78,10 +80,10 @@ class DigitableLineService:
 
         return self.digitable_line
 
-    def _calculate_field_x_verification_digit(self, digits):
+    def _calculate_field_x_verification_digit(self, digits: str) -> int:
         return module_10(digits)
 
-    def get_barcode_by_digitable_line(self, digitable_line: DigitableLineSchema):
+    def get_barcode_by_digitable_line(self, digitable_line: DigitableLineSchema) -> BarcodeOutputSchema:
         from bank_slip.app.services.barcode import BarcodeService
 
         field_1 = digitable_line.field_1.replace(".", "")

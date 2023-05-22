@@ -18,6 +18,7 @@ class Settings(pydantic.BaseSettings):
         default="969824a6-93e4-11eb-8da1-51115a0d4746",
     )
     PORT: int = config("PORT", default=8000, cast=int)
+    HOST: str = config("HOST", default="127.0.0.1")
 
     class Config:
         env_file = ".env"
