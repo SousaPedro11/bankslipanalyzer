@@ -1,6 +1,8 @@
 from typing import List, Optional, Text, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
+
+from app.api.helpers.mapper import NEXXERA_RETURN_MOVEMENT_CODE
 
 
 class BankSlipShippingSchema(BaseModel):
@@ -72,8 +74,8 @@ class FileHeaderSchema(FileLineSchema):
         max_length=7,
     )
     file_layout_version: str = Field(..., description="File layout version", example="020", min_length=3, max_length=3)
-    file_density: str = Field(..., description="File density", example="00000", min_length=5, max_length=5)
-    bank_reserved: str = Field(..., description="Bank reserved", example="a" * 19, min_length=19, max_length=19)
+    file_density: str = Field(..., description="File density", example="00000", min_length=4, max_length=5)
+    bank_reserved: str = Field(..., description="Bank reserved", example="a" * 19, min_length=19, max_length=20)
     enterprise_reserved: str = Field(
         ...,
         description="Enterprise reserved",
@@ -561,7 +563,7 @@ class SegmentTSchema(FileLineSchema):
         description="Codigo de movimento retorno",
         example="01",
         min_length=2,
-        max_length=2,
+        max_length=100,
     )
     maintaining_agency_code: str = Field(
         ...,
@@ -701,6 +703,13 @@ class SegmentTSchema(FileLineSchema):
         max_length=3,
     )
 
+    @validator("return_movement_code", always=True)
+    def validate_return_movement_code(cls, v, values):
+        description = NEXXERA_RETURN_MOVEMENT_CODE.get(v)
+        if description:
+            return f"{v} - {description}"
+        return v
+
     class Config:
         load_only = ["segment_name"]
 
@@ -761,7 +770,7 @@ class SegmentUSchema(FileLineSchema):
         description="Codigo de movimento retorno",
         example="01",
         min_length=2,
-        max_length=2,
+        max_length=100,
     )
 
     title_accruals: str = Field(
@@ -899,6 +908,14 @@ class SegmentUSchema(FileLineSchema):
         min_length=7,
         max_length=7,
     )
+
+    @validator("return_movement_code", always=True)
+    def validate_return_movement_code(cls, v, values):
+        if values.get("segment_code") == "U":
+            description = NEXXERA_RETURN_MOVEMENT_CODE.get(str(v))
+            if description:
+                return f"{v} - {description}"
+        return v
 
     class Config:
         load_only = ["segment_name"]

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from app.api.helpers import validators
 from app.api.schemas import nexxera_document
@@ -29,15 +29,29 @@ class BaseDocumentService(ABC):
     def _set_document_attribute(self, line_number: int, line: str, document: dict) -> None:
         if re.match(validators.regex_file_header_nexxera(), line):
             self.__generate_file_header(line_number, line, document)
+        elif re.match(validators.regex_file_header_nexxera_pre_critc(), line):
+            self.__generate_file_header(line_number, line, document, validators.regex_file_header_nexxera_pre_critc())
         elif re.match(validators.regex_lot_header_nexxera(), line):
             self.__generate_lot_header(line_number, line, document)
+        elif re.match(validators.regex_lot_header_nexxera_pre_crit(), line):
+            self.__generate_lot_header(line_number, line, document, validators.regex_lot_header_nexxera_pre_crit())
         elif re.match(validators.regex_lot_trailer_nexxera(), line):
             self.__generate_lot_trailer(line_number, line, document)
         elif re.match(validators.regex_file_trailer_nexxera(), line):
             self.__generate_file_trailer(line_number, line, document)
+        elif re.match(validators.regex_file_trailer_nexxera_pre_crit(), line):
+            self.__generate_file_trailer(line_number, line, document, validators.regex_file_trailer_nexxera_pre_crit())
 
-    def __generate_file_trailer(self, line_number: int, line: str, document: dict) -> None:
-        groups = re.match(validators.regex_file_trailer_nexxera(), line).groupdict()
+    def __generate_file_trailer(
+        self,
+        line_number: int,
+        line: str,
+        document: dict,
+        regex_validator: Optional[str] = None,
+    ) -> None:
+        if not regex_validator:
+            regex_validator = validators.regex_file_trailer_nexxera()
+        groups = re.match(regex_validator, line).groupdict()
         document["trailer_file"] = nexxera_document.FileTrailerSchema(
             bank=groups["banco"],
             lot=groups["lote"],
@@ -50,8 +64,16 @@ class BaseDocumentService(ABC):
             file_line=line_number,
         )
 
-    def __generate_file_header(self, line_number: int, line: str, document: dict) -> None:
-        groups = re.match(validators.regex_file_header_nexxera(), line).groupdict()
+    def __generate_file_header(
+        self,
+        line_number: int,
+        line: str,
+        document: dict,
+        regex_validator: Optional[str] = None,
+    ) -> None:
+        if not regex_validator:
+            regex_validator = validators.regex_file_header_nexxera()
+        groups = re.match(regex_validator, line).groupdict()
         document["header_file"] = nexxera_document.FileHeaderSchema(
             file_line=line_number,
             bank=groups["banco"],
@@ -86,8 +108,16 @@ class BaseDocumentService(ABC):
         segments = self.__set_attributes()
         return segments
 
-    def __generate_lot_header(self, line_number: int, line: str, document: dict) -> None:
-        groups = re.match(validators.regex_lot_header_nexxera(), line).groupdict()
+    def __generate_lot_header(
+        self,
+        line_number: int,
+        line: str,
+        document: dict,
+        regex_validator: Optional[str] = None,
+    ) -> None:
+        if not regex_validator:
+            regex_validator = validators.regex_lot_header_nexxera()
+        groups = re.match(regex_validator, line).groupdict()
         document["header_lot"] = nexxera_document.LotHeaderSchema(
             file_line=line_number,
             bank=groups["banco"],

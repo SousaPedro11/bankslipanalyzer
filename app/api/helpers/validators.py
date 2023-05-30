@@ -96,6 +96,43 @@ def regex_file_header_nexxera() -> str:
     return "".join(regex_components)
 
 
+def regex_file_header_nexxera_pre_critc() -> str:
+    """
+    Regex to validate the file header from Nexxera
+    :return: str
+    """
+
+    regex_components = [
+        "^(?P<banco>\\d{3})",  # Cod. do Banco na Compensacao
+        "(?P<lote>0{4})",  # Lote de servico
+        "(?P<registro>0)",  # Tipo de registro
+        "(?P<filler>\\s{9})",  # Uso Exclusivo NEXXERA
+        "(?P<inscricao_tipo>\\d)",  # Tipo de inscricao da empresa
+        "(?P<inscricao_numero>\\d{14})",  # Numero de inscricao da empresa
+        "(?P<convenio>.{20})",  # Codigo do convenio no banco
+        "(?P<agencia_codigo>\\d{5})",  # Agencia mantenedora da conta
+        "(?P<agencia_dv>.{1})",  # Digito verificador da agencia
+        "(?P<conta_numero>\\d{12})",  # Numero da conta corrente
+        "(?P<conta_dv>.{1})",  # Digito verificador da conta
+        "(?P<ag_conta_dv>.{1})",  # Digito verificador da agencia/conta
+        "(?P<empresa_nome>.{30})",  # Nome da empresa
+        "(?P<banco_nome>.{30})",  # Nome do banco
+        "(?P<van_nome>.{10})",  # Nome da VAN
+        "(?P<arquivo_codigo>\\d)",  # Codigo remessa/retorno
+        "(?P<arquivo_geracao_data>\\d{8})",  # Data de geracao do arquivo
+        "(?P<arquivo_geracao_hora>\\d{6})",  # Hora de geracao do arquivo
+        "(?P<arquivo_sequencia>\\d{7})",  # Numero sequencial do arquivo
+        "(?P<arquivo_layout>\\d{3})",  # Numero da versao do layout do arquivo
+        "(?P<arquivo_densidade>\\d{4,5})",  # Densidade de gravacao do arquivo
+        "(?P<reservado_banco>.{19,20})",  # Uso exclusivo do banco
+        "(?P<reservado_empresa>.{20})",  # Uso exclusivo da empresa
+        "(?P<observacoes>.{29})",  # Observacao do layout bancario
+        "$",
+    ]
+
+    return "".join(regex_components)
+
+
 def regex_lot_header_nexxera() -> str:
     """
     Regex to validate the lot header from Nexxera
@@ -127,6 +164,43 @@ def regex_lot_header_nexxera() -> str:
         "(?P<data_credito>\\d{8})",  # Data do credito
         "(?P<modelo_cod>.{7})",  # Codigo de modelo personalizado
         "(?P<filler_3>\\s{26})",  # Uso Exclusivo NEXXERA
+        "$",
+    ]
+
+    return "".join(regex_components)
+
+
+def regex_lot_header_nexxera_pre_crit() -> str:
+    """
+    Regex to validate the lot header from Nexxera
+    :return: str
+    """
+
+    regex_components = [
+        "^(?P<banco>\\d{3})",  # Cod. do Banco na Compensacao
+        "(?P<lote>\\d{4})",  # Lote de servico
+        "(?P<registro>1)",  # Tipo de registro
+        "(?P<operacao>.{1})",  # Tipo de operacao
+        "(?P<servico>\\d{2})",  # Tipo de servico
+        "(?P<filler>.{2})",  # Uso Exclusivo NEXXERA
+        "(?P<versao_layout>\\d{3})",  # Versao do layout do lote
+        "(?P<filler_2>\\s{1})",  # Uso Exclusivo NEXXERA
+        "(?P<inscricao_tipo>\\d)",  # Tipo de inscricao da empresa
+        "(?P<inscricao_numero>\\d{15})",  # Numero de inscricao da empresa
+        "(?P<convenio>.{20})",  # Codigo do convenio no banco
+        "(?P<agencia_codigo>\\d{5})",  # Agencia mantenedora da conta
+        "(?P<agencia_dv>.{1})",  # Digito verificador da agencia
+        "(?P<conta_numero>.{12})",  # Numero da conta corrente
+        "(?P<conta_dv>.{1})",  # Digito verificador da conta
+        "(?P<ag_conta_dv>.{1})",  # Digito verificador da agencia/conta
+        "(?P<empresa_nome>.{30})",  # Nome da empresa
+        "(?P<mensagem>.{40})",  # Mensagem 1
+        "(?P<mensagem_2>.{40})",  # Mensagem 2
+        "(?P<numero_remessa>\\d{8})",  # Numero da remessa/retorno
+        "(?P<data_gravacao>\\d{8})",  # Data de gravacao da remessa/retorno
+        "(?P<data_credito>\\d{8})",  # Data do credito
+        "(?P<modelo_cod>.{7})",  # Codigo de modelo personalizado
+        "(?P<filler_3>.{26})",  # Uso Exclusivo NEXXERA
         "$",
     ]
 
@@ -435,6 +509,27 @@ def regex_file_trailer_nexxera() -> str:
         "(?P<qtd_lotes>\\d{6})",  # Quantidade de lotes do arquivo
         "(?P<qtd_registros>\\d{6})",  # Quantidade de registros do arquivo
         "(?P<qtd_contas>\\d{6})",  # Quantidade de contas do arquivo
+        "(?P<filler_2>\\s{205})",  # Uso Exclusivo NEXXERA
+        "$",
+    ]
+
+    return "".join(regex_components)
+
+
+def regex_file_trailer_nexxera_pre_crit() -> str:
+    """
+    Regex to validate the file trailer from Nexxera
+    :return: str
+    """
+
+    regex_components = [
+        "^(?P<banco>\\d{3})",  # Cod. do Banco na Compensacao
+        "(?P<lote>9999)",  # Lote de servico
+        "(?P<registro>9)",  # Tipo de registro
+        "(?P<filler>\\s{9})",  # Uso Exclusivo NEXXERA
+        "(?P<qtd_lotes>\\d{6})",  # Quantidade de lotes do arquivo
+        "(?P<qtd_registros>\\d{6})",  # Quantidade de registros do arquivo
+        "(?P<qtd_contas>\\s{6})",  # Quantidade de contas do arquivo
         "(?P<filler_2>\\s{205})",  # Uso Exclusivo NEXXERA
         "$",
     ]
