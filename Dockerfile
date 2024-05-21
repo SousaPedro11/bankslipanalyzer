@@ -1,9 +1,14 @@
 FROM python:3.10-alpine
 
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONPATH=/code
 ENV TZ=America/Sao_Paulo
 
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone
+
+WORKDIR /code
 
 RUN rm -rf /var/cache/apk/* && \
     apk update && \
@@ -20,21 +25,14 @@ RUN rm -rf /var/cache/apk/* && \
     apk add postgresql-dev && \
     rm -rf /var/cache/apk/*
 
-RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --upgrade pip && \
+    pip install poetry && \
+    poetry config virtualenvs.create false
 
-RUN pip install --no-cache-dir autopep8 flake8
+COPY ./pyproject.toml ./poetry.lock* /code/
 
-RUN pip install --no-cache-dir poetry
+RUN poetry install --no-root
 
-COPY . /code
-WORKDIR /code
+COPY . /code/
 
-ENV PYTHONUNBUFFERED=TRUE
-ENV PYTHONPATH=.
-
-RUN poetry config virtualenvs.create false
-
-RUN poetry install
-
-EXPOSE 80
 CMD ["python", "-m", "app"]
