@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     command: sh -c "uvicorn app.main:get_app --factory --host 0.0.0.0 --port 8899 --reload"
     ports:
-      - "8899:8899"
+      - "8799:8899"
     restart: unless-stopped
     volumes:
       - ./:/code/
