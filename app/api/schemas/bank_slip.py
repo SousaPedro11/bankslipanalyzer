@@ -1,7 +1,7 @@
 import re
 from typing import Any, Dict, Optional, Union
 
-from pydantic import BaseModel, Field, root_validator, validator
+from pydantic import BaseModel, Field, model_validator, validator
 
 from app.api.helpers.validators import regex_barcode, regex_digitable_line
 
@@ -187,9 +187,9 @@ class BarcodeOutputSchema(BarcodeSchema):
         default=None,
     )
 
-    @root_validator
+    @model_validator(mode="before")
     def validate_barcode(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        barcode_expected = values.get("expected_barcode", None)
+        barcode_expected = values.get("expected_barcode")
         if not (barcode_expected and values | barcode_expected.dict() == values):
             values["status"] = "barcode is invalid"
         else:
@@ -209,9 +209,9 @@ class DigitableLineOutputSchema(DigitableLineSchema):
         default=None,
     )
 
-    @root_validator
+    @model_validator(mode="before")
     def validate_digitable_line(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        barcode_expected = values.get("barcode", None)
+        barcode_expected = values.get("barcode")
         if not (barcode_expected and values | barcode_expected.expected_digitable_line.dict() == values):
             values["status"] = "digitable line is invalid"
         else:

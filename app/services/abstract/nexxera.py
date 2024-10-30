@@ -2,17 +2,18 @@ from __future__ import annotations
 
 import re
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from app.api.helpers import validators
 from app.api.schemas import nexxera_document
+from app.api.schemas.nexxera_document import ReturnFileSchema
 
 
 class BaseDocumentService(ABC):
     def __init__(self) -> None:
         self.content: List[str] = []
 
-    def __set_attributes(self) -> Dict[str, Any]:
+    def __set_attributes(self) -> ReturnFileSchema:
         document = {
             "header_file": None,
             "header_lot": None,
@@ -24,7 +25,7 @@ class BaseDocumentService(ABC):
         for index, line in enumerate(self.content):
             self._set_document_attribute(index + 1, line, document)
 
-        return document
+        return ReturnFileSchema.model_validate(document)
 
     def _set_document_attribute(self, line_number: int, line: str, document: dict) -> None:
         if re.match(validators.regex_file_header_nexxera(), line):
@@ -102,7 +103,7 @@ class BaseDocumentService(ABC):
             bank_observations=groups["observacoes"],
         )
 
-    def get_bank_slip_shipping_return(self, content: str) -> Dict[str, Any]:
+    def get_bank_slip_shipping_return(self, content: str) -> ReturnFileSchema:
         self.content = content.splitlines()
 
         segments = self.__set_attributes()

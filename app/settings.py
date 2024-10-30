@@ -2,9 +2,10 @@ from typing import Optional
 
 import pydantic
 from decouple import config
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(pydantic.BaseSettings):
+class Settings(BaseSettings):
     SERVICE_NAME: str = config("SERVICE_NAME", default="bankslip")
     PREFIX: str = config("PREFIX", default=f"/{SERVICE_NAME}/v1")
     PRODUCTION: bool = config("PRODUCTION", default=False, cast=bool)
@@ -20,8 +21,7 @@ class Settings(pydantic.BaseSettings):
     PORT: int = config("PORT", default=8000, cast=int)
     HOST: str = config("HOST", default="127.0.0.1")
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file=".env")
 
 
 settings = Settings()

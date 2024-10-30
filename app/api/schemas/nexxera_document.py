@@ -1,8 +1,14 @@
 from typing import List, Optional, Text, Union
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_serializer, validator
 
-from app.api.helpers.mapper import NEXXERA_RETURN_MOVEMENT_CODE
+from app.api.helpers.mapper import (
+    MOTIVE_OCCURRENCE_A,
+    MOTIVE_OCCURRENCE_B,
+    MOTIVE_OCCURRENCE_C_06,
+    MOTIVE_OCCURRENCE_C_09,
+    NEXXERA_RETURN_MOVEMENT_CODE,
+)
 
 
 class BankSlipShippingSchema(BaseModel):
@@ -143,7 +149,8 @@ class SegmentPSchema(FileLineSchema):
         example="P",
         min_length=1,
         max_length=1,
-        regex="P",
+        pattern="P",
+        exclude=True,
     )
     bank: str = Field(..., description="Cod. do Banco na Compensacao", example="104", min_length=3, max_length=3)
     service_lot: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
@@ -320,9 +327,6 @@ class SegmentPSchema(FileLineSchema):
     )
     free_use: str = Field(..., description="Uso livre", example="N", min_length=1, max_length=1)
 
-    class Config:
-        load_only = ["segment_name"]
-
 
 class SegmentQSchema(FileLineSchema):
     segment_name: Optional[str] = Field(
@@ -331,7 +335,8 @@ class SegmentQSchema(FileLineSchema):
         example="Q",
         min_length=1,
         max_length=1,
-        regex="Q",
+        pattern="Q",
+        exclude=True,
     )
     bank_code: str = Field(..., description="Cod. do Banco na Compensacao", example="756", min_length=3, max_length=3)
     service_batch: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
@@ -413,9 +418,6 @@ class SegmentQSchema(FileLineSchema):
     )
     wallet_variation: str = Field(..., description="Variacao da carteira", example=" " * 3, min_length=3, max_length=3)
 
-    class Config:
-        load_only = ["segment_name"]
-
 
 class SegmentRSchema(FileLineSchema):
     segment_name: Optional[str] = Field(
@@ -424,7 +426,8 @@ class SegmentRSchema(FileLineSchema):
         example="R",
         min_length=1,
         max_length=1,
-        regex="R",
+        pattern="R",
+        exclude=True,
     )
     bank_code: str = Field(..., description="Cod. do Banco na Compensacao", example="756", min_length=3, max_length=3)
     service_batch: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
@@ -513,9 +516,6 @@ class SegmentRSchema(FileLineSchema):
     debit_message: str = Field(..., description="Mensagem de debito", example=" " * 1, min_length=1, max_length=1)
     filler_3: str = Field(..., description="Uso Exclusivo NEXXERA", example=" " * 9, min_length=9, max_length=9)
 
-    class Config:
-        load_only = ["segment_name"]
-
 
 class SegmentSSchema(FileLineSchema):
     segment_name: Optional[str] = Field(
@@ -524,11 +524,9 @@ class SegmentSSchema(FileLineSchema):
         example="S",
         min_length=1,
         max_length=1,
-        regex="S",
+        pattern="S",
+        exclude=True,
     )
-
-    class Config:
-        load_only = ["segment_name"]
 
 
 class SegmentTSchema(FileLineSchema):
@@ -538,7 +536,8 @@ class SegmentTSchema(FileLineSchema):
         example="T",
         min_length=1,
         max_length=1,
-        regex="T",
+        pattern="T",
+        exclude=True,
     )
     bank: str = Field(..., description="Cod. do Banco na Compensacao", example="104", min_length=3, max_length=3)
     service_lot: str = Field(..., description="Lote de servico", example="0001", min_length=4, max_length=4)
@@ -703,15 +702,37 @@ class SegmentTSchema(FileLineSchema):
         max_length=3,
     )
 
-    @validator("return_movement_code", always=True)
-    def validate_return_movement_code(cls, v, values):
+    @field_serializer("return_movement_code", when_used="always", check_fields=False)
+    def serialize_return_movement_code(self, v):
         description = NEXXERA_RETURN_MOVEMENT_CODE.get(v)
         if description:
             return f"{v} - {description}"
         return v
 
-    class Config:
-        load_only = ["segment_name"]
+    @field_serializer("ocurrency_description", when_used="always", check_fields=False)
+    def serialize_ocurrency_description(self, v):
+        motive_occurences = [v[i : i + 2] for i in range(0, len(v), 2)]
+        motive_occurences = filter(lambda motive: motive.strip(), motive_occurences)
+        return map(self.get_motive_from_map, motive_occurences)
+
+    def get_map_to_occurency(self):
+        match self.return_movement_code:
+            case "02" | "03" | "11" | "26" | "29" | "30" | "35" | "36" | "54" | "60":
+                motive_map = MOTIVE_OCCURRENCE_A
+            case "28":
+                motive_map = MOTIVE_OCCURRENCE_B
+            case "06" | "17":
+                motive_map = MOTIVE_OCCURRENCE_C_06
+            case "09":
+                motive_map = MOTIVE_OCCURRENCE_C_09
+            case _:
+                motive_map = {}
+        return motive_map
+
+    def get_motive_from_map(self, motive: str):
+        motive_map = self.get_map_to_occurency()
+
+        return f"{motive} - {motive_map.get(motive, "")}"
 
 
 class SegmentUSchema(FileLineSchema):
@@ -721,7 +742,8 @@ class SegmentUSchema(FileLineSchema):
         example="U",
         min_length=1,
         max_length=1,
-        regex="U",
+        pattern="U",
+        exclude=True,
     )
     bank: str = Field(
         ...,
@@ -917,9 +939,6 @@ class SegmentUSchema(FileLineSchema):
                 return f"{v} - {description}"
         return v
 
-    class Config:
-        load_only = ["segment_name"]
-
 
 class SegmentVSchema(FileLineSchema):
     segment_name: Optional[str] = Field(
@@ -928,11 +947,9 @@ class SegmentVSchema(FileLineSchema):
         example="V",
         min_length=1,
         max_length=1,
-        regex="V",
+        pattern="V",
+        exclude=True,
     )
-
-    class Config:
-        load_only = ["segment_name"]
 
 
 class SegmentWSchema(FileLineSchema):
@@ -942,11 +959,9 @@ class SegmentWSchema(FileLineSchema):
         example="W",
         min_length=1,
         max_length=1,
-        regex="W",
+        pattern="W",
+        exclude=True,
     )
-
-    class Config:
-        load_only = ["segment_name"]
 
 
 class SegmentYSchema(FileLineSchema):
@@ -956,17 +971,15 @@ class SegmentYSchema(FileLineSchema):
         example="Y",
         min_length=1,
         max_length=1,
-        regex="Y",
+        pattern="Y",
+        exclude=True,
     )
-
-    class Config:
-        load_only = ["segment_name"]
 
 
 class LotTrailerSchema(FileLineSchema):
     bank_code: str = Field(..., description="Cod. do Banco na Compensacao", example="104", min_length=3, max_length=3)
     batch: str = Field(..., description="Lote de servico", example="0000", min_length=4, max_length=4)
-    record_type: str = Field(..., description="Tipo de registro", example="5", min_length=1, max_length=1, regex="5")
+    record_type: str = Field(..., description="Tipo de registro", example="5", min_length=1, max_length=1, pattern="5")
     filler: str = Field(..., description="Uso Exclusivo FEBRABAN/CNAB", example=" " * 9, min_length=9, max_length=9)
     batch_records_quantity: str = Field(
         ...,
